@@ -148,17 +148,18 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const gridContainer = document.getElementById('team-grid');
-        // ID rilis resmi yang sudah dikoreksi tanpa typo huruf kecil l
         const apiUrl = 'https://script.google.com/macros/s/AKfycbwREzVUx42kFPi1pWgwUCdn0xi_ZF2GazKK5ZM2N9ZLV4f56rPy5KhKC4-yZ7lTwDvEww/exec';
         const defaultAvatar = 'https://www.w3schools.com/howto/img_avatar.png';
 
-        // Fungsi real-time pengirim tinggi halaman asli ke OJS
+        // PERBAIKAN UTAMA: Mengirim data tinggi asli tanpa memedulikan batasan domain (menggunakan '*' aman)
         function kirimTinggiKeOJS() {
-            const tinggiKonten = document.documentElement.scrollHeight || document.body.scrollHeight;
-            window.parent.postMessage({ 'tinggiIframe': tinggiKonten }, '*');
+            const tinggiKonten = document.documentElement.getBoundingClientRect().height || document.body.scrollHeight;
+            if (tinggiKonten > 100) {
+                window.parent.postMessage({ 'tinggiIframeYupa': tinggiKonten }, '*');
+            }
         }
 
-        // TEKNOLOGI BARU: Memantau perubahan tinggi halaman secara instan (termasuk saat foto selesai di-load)
+        // Memantau perubahan ukuran element secara real-time (saat data masuk atau gambar selesai di-load)
         const observer = new ResizeObserver(() => {
             kirimTinggiKeOJS();
         });
@@ -227,8 +228,8 @@
                     gridContainer.appendChild(card);
                 });
                 
-                // Memicu kalkulasi tinggi ulang sesaat setelah semua data kartunya selesai dirender
-                kirimTinggiKeOJS();
+                // Pemicu awal kalkulasi tinggi
+                setTimeout(kirimTinggiKeOJS, 500);
             })
             .catch(error => {
                 console.error('Error:', error);
