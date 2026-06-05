@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reviewers 2-Column Compact Grid with Official Logos</title>
+    <title>Reviewers 2-Column Compact Grid with Repository Logos</title>
     <!-- Memanggil pustaka FontAwesome untuk ikon kampus -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -102,7 +102,7 @@
             flex-shrink: 0;
         }
 
-        /* Tombol lingkaran penampung logo asli */
+        /* Tombol lingkaran penampung logo */
         .yupa-btn {
             display: inline-flex;
             align-items: center;
@@ -123,7 +123,7 @@
             border-color: #cbd5e1;
         }
 
-        /* Pengaturan ukuran logo asli di dalam lingkaran */
+        /* Pengaturan ukuran logo agar pas dan rapi di dalam lingkaran */
         .logo-provider {
             width: 18px;
             height: 18px;
@@ -131,14 +131,19 @@
         }
 
         .logo-scopus {
-            width: 15px;
-            height: 15px;
+            width: 16px;
+            height: 16px;
         }
 
-        /* Pengaturan logo Sinta SVG agar pas di tengah */
         .logo-sinta {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%; /* Mengikuti bentuk lingkaran jika file aslinya kotak */
+        }
+
+        .logo-gs {
+            width: 18px;
+            height: 18px;
         }
 
         .yupa-status {
@@ -167,11 +172,11 @@
         const apiUrl = 'https://script.google.com/macros/s/AKfycbwREzVUx42kFPi1pWgwUCdn0xi_ZF2GazKK5ZM2N9ZLV4f56rPy5KhKC4-yZ7lTwDvEww/exec';
         const defaultAvatar = 'https://www.w3schools.com/howto/img_avatar.png';
 
-        // URL Aset Gambar Logo Resmi Provider (Menggunakan CDN API Iconify khusus akademis untuk SINTA)
+        // MEMANGGIL LANGSUNG FILE REPOSITORI LOKAL YANG ANDA SEDIAKAN
         const logoUrls = {
-            scholar: 'https://upload.wikimedia.org/wikipedia/commons/c/c7/Google_Scholar_logo.svg',
-            scopus: 'https://upload.wikimedia.org/wikipedia/commons/2/26/Scopus_logo_2021.svg',
-            sinta: 'https://api.iconify.design/academicons:sinta.svg?color=%2311b050'
+            scholar: 'google scholar.png', // Menangani spasi nama file dengan aman
+            scopus: 'scopus.png',
+            sinta: 'sinta.jpg'
         };
 
         fetch(apiUrl)
@@ -217,7 +222,8 @@
 
                     let buttonsHtml = '';
                     if (linkGS && linkGS.toString().trim() !== "") {
-                        buttonsHtml += `<a href="${linkGS}" target="_blank" class="yupa-btn" title="Google Scholar"><img src="${logoUrls.scholar}" class="logo-provider" alt="GS"></a>`;
+                        // Menggunakan encodeURIComponent untuk menangani file "google scholar.png" yang memakai spasi asli
+                        buttonsHtml += `<a href="${linkGS}" target="_blank" class="yupa-btn" title="Google Scholar"><img src="${encodeURIComponent(logoUrls.scholar)}" class="logo-provider logo-gs" alt="GS"></a>`;
                     }
                     if (linkScopus && linkScopus.toString().trim() !== "") {
                         buttonsHtml += `<a href="${linkScopus}" target="_blank" class="yupa-btn" title="Scopus"><img src="${logoUrls.scopus}" class="logo-provider logo-scopus" alt="Scopus"></a>`;
