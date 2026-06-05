@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reviewers 2-Column Grid - Enhanced Typography & Icons</title>
-    <!-- Memanggil pustaka FontAwesome untuk ikon kampus dan spinner -->
+    <title>Reviewers Jurnal Yupa - Terintegrasi Sistem Baru</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
@@ -14,8 +13,6 @@
             padding: 5px 5px 30px 5px; 
             overflow: hidden; 
         }
-
-        /* Susunan menjadi 2 kolom berjejer kesamping */
         .yupa-grid {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -23,8 +20,6 @@
             width: 100%;
             box-sizing: border-box;
         }
-
-        /* Desain kartu utama */
         .yupa-card {
             background: #ffffff;
             border: 1px solid #e2e8f0;
@@ -33,24 +28,20 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.01), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
             display: flex;
             flex-direction: row;
-            align-items: center; /* Menjaga keseimbangan vertikal di tengah */
+            align-items: center; 
             justify-content: flex-start;
             box-sizing: border-box;
             transition: all 0.2s ease;
         }
-
         .yupa-card:hover {
             border-color: #cbd5e1;
             background-color: #f8fafc;
             transform: translateY(-1px);
         }
-
-        /* FOTO PROFIL DI SEBELAH KIRI */
         .yupa-left-column {
             flex-shrink: 0;
             margin-right: 18px; 
         }
-
         .yupa-img {
             width: 70px; 
             height: 70px;
@@ -60,16 +51,12 @@
             background-color: #f8fafc;
             display: block;
         }
-
-        /* INFORMASI TEKS DAN ICON DI SEBELAH KANAN */
         .yupa-info-wrapper {
             display: flex;
             flex-direction: column;
             flex-grow: 1;
             min-width: 0;
         }
-
-        /* Baris Nama Utama (FONT BESAR & SUPER TEBAL) */
         .yupa-name {
             font-size: 1.15rem; 
             font-weight: 800;   
@@ -79,8 +66,6 @@
             white-space: normal; 
             word-wrap: break-word;
         }
-
-        /* Baris Institusi Kampus (FONT PERTEBAL) */
         .yupa-inst {
             font-size: 0.88rem; 
             font-weight: 600;   
@@ -93,13 +78,7 @@
             white-space: normal;
             word-wrap: break-word;
         }
-
-        .yupa-inst i {
-            color: #0284c7; 
-            font-size: 0.9rem;
-        }
-
-        /* BARISAN ICON BERJEJER HORIZONTAL (UKURAN LEBIH BESAR) */
+        .yupa-inst i { color: #0284c7; font-size: 0.9rem; }
         .yupa-links {
             display: flex;
             flex-direction: row; 
@@ -108,57 +87,21 @@
             align-items: center;
             width: 100%;
         }
-
-        /* Tombol penampung badge persegi panjang */
         .yupa-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             text-decoration: none;
             transition: all 0.2s ease;
-            height: 25px; /* Tinggi badge 25px agar tulisan terbaca */
+            height: 25px; 
             width: auto;  
         }
-
-        .yupa-btn:hover {
-            transform: translateY(-1.5px);
-            filter: brightness(0.85);
-        }
-
-        .logo-provider {
-            height: 100%;
-            width: auto;
-            object-fit: contain;
-            display: block;
-        }
-
-        /* Desain Kontainer Loading Spinner Animasi */
-        .yupa-loading-container {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 50px 0;
-            color: #64748b;
-            font-size: 0.9rem;
-        }
-
-        .yupa-spinner {
-            font-size: 2.2rem;
-            color: #0284c7;
-            margin-bottom: 12px;
-        }
-
-        .yupa-status {
-            text-align: center;
-            color: #64748b;
-            font-style: italic;
-            padding: 200px 0;
-            grid-column: 1 / -1;
-        }
-
-        /* Responsif mobile */
-        @media (max-width: 768px) {
-            .yupa-grid { grid-template-columns: repeat(1, minmax(0, 1fr)); }
-        }
+        .yupa-btn:hover { transform: translateY(-1.5px); filter: brightness(0.85); }
+        .logo-provider { height: 100%; width: auto; object-fit: contain; display: block; }
+        .yupa-loading-container { grid-column: 1 / -1; text-align: center; padding: 60px 0; color: #64748b; font-size: 0.9rem; }
+        .yupa-spinner { font-size: 2.2rem; color: #0284c7; margin-bottom: 12px; }
+        .yupa-status { text-align: center; color: #64748b; font-style: italic; padding: 20px 0; grid-column: 1 / -1; }
+        @media (max-width: 768px) { .yupa-grid { grid-template-columns: repeat(1, minmax(0, 1fr)); } }
     </style>
 </head>
 <body>
@@ -166,135 +109,13 @@
     <div class="yupa-grid" id="team-grid">
         <div class="yupa-loading-container" id="loading-spinner">
             <i class="fa-solid fa-circle-notch fa-spin yupa-spinner"></i>
-            <div>Menghubungkan ke server basis data...</div>
+            <div>Menghubungkan ke server basis data baru...</div>
         </div>
     </div>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const gridContainer = document.getElementById('team-grid');
-        const apiUrl = 'https://script.google.com/macros/s/AKfycbwREzVUx42kFPi1pWgwUCdn0xi_ZF2GazKK5ZM2N9ZLV4f56rPy5KhKC4-yZ7lTwDvEww/exec';
-        const defaultAvatar = 'https://www.w3schools.com/howto/img_avatar.png';
-
-        const logoUrls = {
-            scholar: 'google scholar.png', 
-            scopus: 'scopus.png',
-            sinta: 'sinta.jpg',
-            orcid: 'orcid.jpg'
-        };
-
-        // DATA CADANGAN LOKAL (ANTI-LAG)
-        const dataCadanganYupa = [
-            {"nama": "Sariyatun", "institusi": "Universitas Sebelas Maret", "googlescholar": "https://scholar.google.com"},
-            {"nama": "Leo Agung Sutimin", "institusi": "Universitas Sebelas Maret"},
-            {"nama": "Nunuk Suryani", "institusi": "Universitas Sebelas Maret"},
-            {"nama": "Nur Fatah Abidin", "institusi": "Universitas Sebelas Maret"},
-            {"nama": "Herry Porda Nugroho Putro", "institusi": "Universitas Lambung Mangkurat"},
-            {"nama": "Heri Susanto", "institusi": "Universitas Lambung Mangkurat"},
-            {"nama": "Mansyur", "institusi": "Universitas Lambung Mangkurat"},
-            {"nama": "Asyrul Fikri", "institusi": "Universitas Riau"},
-            {"nama": "Ahmad Muhajir", "institusi": "Universitas Andalas"},
-            {"nama": "Aksa", "institusi": "UIN Alauddin Makassar"},
-            {"nama": "Muhammad Rezky Noor Handy", "institusi": "Universitas Lambung Mangkurat"},
-            {"nama": "Piki Setri Pernantah", "institusi": "Universitas Riau"},
-            {"nama": "Fauzan Syahru Ramadhan", "institusi": "Universitas Diponegoro"},
-            {"nama": "Bunari", "institusi": "Universitas Riau"},
-            {"nama": "Yanuar Al Fiqri", "institusi": "Universitas Riau"},
-            {"nama": "Firza", "institusi": "Universitas Negeri Padang", "googlescholar": "https://scholar.google.com", "sinta": "https://sinta.kemdikbud.go.id"},
-            {"nama": "Rulianto", "institusi": "Universitas Mahasaraswati Denpasar"},
-            {"nama": "Dewicca Fatma Nadilla", "institusi": "Universitas Lambung Mangkurat"},
-            {"nama": "Mohammad Zaenal Arifin Anis", "institusi": "Universitas Lambung Mangkurat"},
-            {"nama": "Rochgiyanti", "institusi": "Universitas Lambung Mangkurat"},
-            {"nama": "Syaharuddin", "institusi": "Universitas Lambung Mangkurat"},
-            {"nama": "Roger Kembuan", "institusi": "Universitas Sam Ratulangi"},
-            {"nama": "Aisiah", "institusi": "Universitas Negeri Padang"},
-            {"nama": "Khoirul Anwar", "institusi": "Universitas Negeri Semarang"}
-        ];
-
-        function renderDataGrid(data) {
-            gridContainer.innerHTML = ''; 
-            if (!data || data.length === 0) {
-                gridContainer.innerHTML = '<div class="yupa-status">Belum ada data reviewer terisi.</div>';
-                return;
-            }
-
-            data.forEach(item => {
-                const cleanItem = {};
-                for (let key in item) {
-                    const normalizedKey = key.toLowerCase().replace(/[^a-z0-9]/g, '');
-                    cleanItem[normalizedKey] = item[key];
-                }
-
-                let nama = cleanItem['nama'] || '';
-                const institusi = cleanItem['institusi'] || '';
-                
-                const linkGS = cleanItem['googlescholar'] || cleanItem['linkgs'] || '';
-                const linkSinta = cleanItem['sintaid'] || cleanItem['linksinta'] || '';
-                const linkScopus = cleanItem['scopusid'] || cleanItem['linkscopus'] || '';
-                const linkOrcid = cleanItem['orcid'] || cleanItem['linkorcid'] || cleanItem['orcidid'] || '';
-                const foto = cleanItem['foto'] || cleanItem['fotogs'] || '';
-
-                if (!nama || String(nama).trim() === "") return;
-
-                const card = document.createElement('div');
-                card.className = 'yupa-card';
-
-                const imageSrc = (foto && String(foto).trim() !== "") ? String(foto).trim() : defaultAvatar;
-
-                let buttonsHtml = '';
-                if (linkGS && linkGS.toString().trim() !== "") {
-                    buttonsHtml += `<a href="${linkGS}" target="_blank" class="yupa-btn" title="Google Scholar"><img src="${encodeURIComponent(logoUrls.scholar)}" class="logo-provider" alt="Google Scholar"></a>`;
-                }
-                if (linkScopus && linkScopus.toString().trim() !== "") {
-                    buttonsHtml += `<a href="${linkScopus}" target="_blank" class="yupa-btn" title="Scopus"><img src="${logoUrls.scopus}" class="logo-provider" alt="Scopus"></a>`;
-                }
-                if (linkSinta && linkSinta.toString().trim() !== "") {
-                    buttonsHtml += `<a href="${linkSinta}" target="_blank" class="yupa-btn" title="SINTA ID"><img src="${logoUrls.sinta}" class="logo-provider" alt="SINTA"></a>`;
-                }
-                if (linkOrcid && linkOrcid.toString().trim() !== "") {
-                    buttonsHtml += `<a href="${linkOrcid}" target="_blank" class="yupa-btn" title="ORCID iD"><img src="${logoUrls.orcid}" class="logo-provider" alt="ORCID"></a>`;
-                }
-
-                card.innerHTML = `
-                    <div class="yupa-left-column">
-                        <img src="${imageSrc}" alt="${nama}" class="yupa-img" onerror="this.src='${defaultAvatar}'">
-                    </div>
-                    <div class="yupa-info-wrapper">
-                        <div class="yupa-name">${nama}</div>
-                        <div class="yupa-inst"><i class="fa-solid fa-university"></i> ${institusi}</div>
-                        <div class="yupa-links">${buttonsHtml}</div>
-                    </div>
-                `;
-                gridContainer.appendChild(card);
-            });
-        }
-
-        let dataSudahDiterima = false;
-        const batasWaktuTunggu = setTimeout(() => {
-            if (!dataSudahDiterima) {
-                dataSudahDiterima = true;
-                renderDataGrid(dataCadanganYupa);
-            }
-        }, 3500); 
-
-        fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-                if (!dataSudahDiterima) {
-                    clearTimeout(batasWaktuTunggu);
-                    dataSudahDiterima = true;
-                    renderDataGrid(data);
-                }
-            })
-            .catch(error => {
-                console.error('Fetch Error, beralih ke data lokal:', error);
-                if (!dataSudahDiterima) {
-                    clearTimeout(batasWaktuTunggu);
-                    dataSudahDiterima = true;
-                    renderDataGrid(dataCadanganYupa);
-                }
-            });
-    });
-</script>
-</body>
-</html>
+        
+        // TELAH DIPERBARUI: Menggunakan ID Web App Rilisan Teranyar Anda
+        const apiUrl = '
