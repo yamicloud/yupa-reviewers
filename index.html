@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reviewers 2-Column Grid - Perfect Alignment</title>
+    <title>Reviewers 2-Column Grid - Enhanced Typography & Icons</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
@@ -32,7 +32,7 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.01), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
             display: flex;
             flex-direction: row;
-            align-items: center; /* Membuat elemen vertikal center seimbang */
+            align-items: center; /* Menjaga keseimbangan vertikal di tengah */
             justify-content: flex-start;
             box-sizing: border-box;
             transition: all 0.2s ease;
@@ -47,12 +47,12 @@
         /* FOTO PROFIL DI SEBELAH KIRI */
         .yupa-left-column {
             flex-shrink: 0;
-            margin-right: 16px;
+            margin-right: 18px; /* Sedikit diperlebar jaraknya */
         }
 
         .yupa-img {
-            width: 65px;
-            height: 65px;
+            width: 70px; /* Ukuran foto dinaikkan sedikit agar seimbang dengan font jumbo */
+            height: 70px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid #f1f5f9;
@@ -68,22 +68,23 @@
             min-width: 0;
         }
 
-        /* Baris Nama Utama (Font Besar & Tegas) */
+        /* Baris Nama Utama (FONT BESAR & SUPER TEBAL) */
         .yupa-name {
-            font-size: 1.05rem; 
-            font-weight: 700;   
+            font-size: 1.15rem; /* DIURUTKAN: Naik dari 1.05rem menjadi 1.15rem */
+            font-weight: 800;   /* DIURUTKAN: Sangat tegas dan premium */
             color: #0f172a;
-            margin: 0 0 4px 0;
+            margin: 0 0 5px 0;
             line-height: 1.3;
             white-space: normal; 
             word-wrap: break-word;
         }
 
-        /* Baris Institusi Kampus */
+        /* Baris Institusi Kampus (FONT PERTEBAL) */
         .yupa-inst {
-            font-size: 0.85rem; 
-            color: #475569;
-            margin: 0 0 8px 0; /* Jarak ke bawah menuju baris icon */
+            font-size: 0.88rem; /* Imbang dengan ukuran nama */
+            font-weight: 600;   /* DIURUTKAN: Dibuat tebal (Semi-Bold) sesuai request */
+            color: #334155;     /* Warna disesuaikan agar lebih kontras */
+            margin: 0 0 10px 0; /* Ruang ke bawah menuju baris icon */
             line-height: 1.4;
             display: flex;
             align-items: center; 
@@ -94,15 +95,15 @@
 
         .yupa-inst i {
             color: #0284c7; 
-            font-size: 0.85rem;
+            font-size: 0.9rem;
         }
 
-        /* BARISAN ICON BERJEJER HORIZONTAL DI KANAN BAWAH NAMA */
+        /* BARISAN ICON BERJEJER HORIZONTAL (UKURAN LEBIH BESAR) */
         .yupa-links {
             display: flex;
-            flex-direction: row; /* Kembali horizontal kesamping */
+            flex-direction: row; 
             flex-wrap: wrap;
-            gap: 8px; /* Jarak antar icon berkecukupan */
+            gap: 10px; /* Jarak antar ikon diperlonggar agar tidak berhimpitan */
             align-items: center;
             width: 100%;
         }
@@ -114,13 +115,13 @@
             justify-content: center;
             text-decoration: none;
             transition: all 0.2s ease;
-            height: 20px; /* Tinggi badge ideal */
+            height: 25px; /* DIURUTKAN: Naik dari 20px menjadi 25px (Lebih Besar & Jelas) */
             width: auto;  
         }
 
         .yupa-btn:hover {
-            transform: translateY(-1px);
-            filter: brightness(0.9);
+            transform: translateY(-1.5px);
+            filter: brightness(0.85);
         }
 
         .logo-provider {
@@ -229,71 +230,4 @@
                 const linkGS = cleanItem['googlescholar'] || cleanItem['linkgs'] || '';
                 const linkSinta = cleanItem['sintaid'] || cleanItem['linksinta'] || '';
                 const linkScopus = cleanItem['scopusid'] || cleanItem['linkscopus'] || '';
-                const linkOrcid = cleanItem['orcid'] || cleanItem['linkorcid'] || cleanItem['orcidid'] || '';
-                const foto = cleanItem['foto'] || cleanItem['fotogs'] || '';
-
-                if (!nama || String(nama).trim() === "") return;
-
-                const card = document.createElement('div');
-                card.className = 'yupa-card';
-
-                const imageSrc = (foto && String(foto).trim() !== "") ? String(foto).trim() : defaultAvatar;
-
-                let buttonsHtml = '';
-                if (linkGS && linkGS.toString().trim() !== "") {
-                    buttonsHtml += `<a href="${linkGS}" target="_blank" class="yupa-btn" title="Google Scholar"><img src="${encodeURIComponent(logoUrls.scholar)}" class="logo-provider" alt="Google Scholar"></a>`;
-                }
-                if (linkScopus && linkScopus.toString().trim() !== "") {
-                    buttonsHtml += `<a href="${linkScopus}" target="_blank" class="yupa-btn" title="Scopus"><img src="${logoUrls.scopus} " class="logo-provider" alt="Scopus"></a>`;
-                }
-                if (linkSinta && linkSinta.toString().trim() !== "") {
-                    buttonsHtml += `<a href="${linkSinta}" target="_blank" class="yupa-btn" title="SINTA ID"><img src="${logoUrls.sinta}" class="logo-provider" alt="SINTA"></a>`;
-                }
-                if (linkOrcid && linkOrcid.toString().trim() !== "") {
-                    buttonsHtml += `<a href="${linkOrcid}" target="_blank" class="yupa-btn" title="ORCID iD"><img src="${logoUrls.orcid}" class="logo-provider" alt="ORCID"></a>`;
-                }
-
-                // STRUKTUR BARU: Foto murni di kiri tunggal, seluruh info teks & barisan horizontal badge dipindah ke kanan
-                card.innerHTML = `
-                    <div class="yupa-left-column">
-                        <img src="${imageSrc}" alt="${nama}" class="yupa-img" onerror="this.src='${defaultAvatar}'">
-                    </div>
-                    <div class="yupa-info-wrapper">
-                        <div class="yupa-name">${nama}</div>
-                        <div class="yupa-inst"><i class="fa-solid fa-university"></i> ${institusi}</div>
-                        <div class="yupa-links">${buttonsHtml}</div>
-                    </div>
-                `;
-                gridContainer.appendChild(card);
-            });
-        }
-
-        let dataSudahDiterima = false;
-        const batasWaktuTunggu = setTimeout(() => {
-            if (!dataSudahDiterima) {
-                dataSudahDiterima = true;
-                renderDataGrid(dataCadanganYupa);
-            }
-        }, 3500); 
-
-        fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-                if (!dataSudahDiterima) {
-                    clearTimeout(batasWaktuTunggu);
-                    dataSudahDiterima = true;
-                    renderDataGrid(data);
-                }
-            })
-            .catch(error => {
-                console.error('Fetch Error, beralih ke data lokal:', error);
-                if (!dataSudahDiterima) {
-                    clearTimeout(batasWaktuTunggu);
-                    dataSudahDiterima = true;
-                    renderDataGrid(dataCadanganYupa);
-                }
-            });
-    });
-</script>
-</body>
-</html>
+                const linkOrcid = cleanItem['orcid'] || cleanItem['linkorcid'] || cleanItem
