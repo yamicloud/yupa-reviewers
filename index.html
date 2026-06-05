@@ -4,14 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reviewers 2-Column Compact Grid with Official Logos</title>
-    <!-- Memanggil pustaka FontAwesome untuk ikon kampus -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background-color: transparent; 
             margin: 0;
-            padding: 5px 5px 30px 5px; /* Jarak pengaman bawah */
+            padding: 5px 5px 30px 5px; 
             overflow: hidden; 
         }
 
@@ -130,10 +129,15 @@
             object-fit: contain;
         }
 
-        /* Khusus scopus disesuaikan sedikit agar proporsional */
         .logo-scopus {
             width: 15px;
             height: 15px;
+        }
+
+        /* Sentuhan khusus agar logo Sinta pas di tengah bulatan */
+        .logo-sinta {
+            width: 22px;
+            height: 22px;
         }
 
         .yupa-status {
@@ -162,12 +166,12 @@
         const apiUrl = 'https://script.google.com/macros/s/AKfycbwREzVUx42kFPi1pWgwUCdn0xi_ZF2GazKK5ZM2N9ZLV4f56rPy5KhKC4-yZ7lTwDvEww/exec';
         const defaultAvatar = 'https://www.w3schools.com/howto/img_avatar.png';
 
-        // URL Aset Gambar Logo Resmi Provider (Menggunakan CDN resmi & terpercaya)
+        // URL Aset Gambar Logo Resmi Provider (Menggunakan link CDN publik bebas blokir)
         const logoUrls = {
             scholar: 'https://upload.wikimedia.org/wikipedia/commons/c/c7/Google_Scholar_logo.svg',
             scopus: 'https://upload.wikimedia.org/wikipedia/commons/2/26/Scopus_logo_2021.svg',
-            sinta: 'https://raw.githubusercontent.com/yamicloud/yupa-reviewers/main/logo-sinta.png' 
-            // Jika link raw SINTA di atas tidak sengaja terhapus, alternatif cadangan otomatis di bawah akan mem-backup.
+            // PERBAIKAN: Menggunakan file vektor PNG Sinta yang aman dari blokir hotlinking
+            sinta: 'https://ik.imagekit.io/yupa/sinta-logo.png' 
         };
 
         fetch(apiUrl)
@@ -211,7 +215,6 @@
 
                     const imageSrc = (foto && String(foto).trim() !== "") ? String(foto).trim() : defaultAvatar;
 
-                    // Menyusun tombol menggunakan elemen IMG logo asli provider
                     let buttonsHtml = '';
                     if (linkGS && linkGS.toString().trim() !== "") {
                         buttonsHtml += `<a href="${linkGS}" target="_blank" class="yupa-btn" title="Google Scholar"><img src="${logoUrls.scholar}" class="logo-provider" alt="GS"></a>`;
@@ -220,9 +223,9 @@
                         buttonsHtml += `<a href="${linkScopus}" target="_blank" class="yupa-btn" title="Scopus"><img src="${logoUrls.scopus}" class="logo-provider logo-scopus" alt="Scopus"></a>`;
                     }
                     if (linkSinta && linkSinta.toString().trim() !== "") {
-                        // Menggunakan fallback jika logo sinta utama memerlukan backup visual kemenristek/brin
-                        const sintaImgSrc = 'https://sinta.kemdikbud.go.id/assets/img/logo.png';
-                        buttonsHtml += `<a href="${linkSinta}" target="_blank" class="yupa-btn" title="SINTA ID"><img src="${sintaImgSrc}" class="logo-provider" alt="Sinta" onerror="this.src='https://assets.kompasiana.com/items/album/2021/08/25/sinta-61262d0406310e06000c00b2.png'"></a>`;
+                        // PERBAIKAN UTAMA: Dilengkapi sistem fallback multiguna agar logo Sinta dijamin keluar
+                        const sintaBackupUrl = 'https://assets.kompasiana.com/items/album/2021/08/25/sinta-61262d0406310e06000c00b2.png';
+                        buttonsHtml += `<a href="${linkSinta}" target="_blank" class="yupa-btn" title="SINTA ID"><img src="${logoUrls.sinta}" class="logo-provider logo-sinta" alt="Sinta" onerror="this.src='${sintaBackupUrl}'"></a>`;
                     }
 
                     card.innerHTML = `
