@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reviewers 2-Column Compact Grid with Horizontal Badges</title>
-    <!-- Memanggil pustaka FontAwesome untuk ikon kampus -->
+    <!-- Memanggil pustaka FontAwesome untuk ikon kampus dan spinner -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
@@ -109,8 +109,8 @@
             justify-content: center;
             text-decoration: none;
             transition: all 0.2s ease;
-            height: 24px; /* Kunci tinggi badge agar seragam */
-            width: auto;  /* Lebar otomatis menyesuaikan bentuk horizontal logo */
+            height: 24px; 
+            width: auto;  
         }
 
         .yupa-btn:hover {
@@ -124,6 +124,21 @@
             width: auto;
             object-fit: contain;
             display: block;
+        }
+
+        /* Desain Kontainer Loading Spinner Animasi */
+        .yupa-loading-container {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px 0;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .yupa-spinner {
+            font-size: 2rem;
+            color: #0284c7; /* Warna biru premium */
+            margin-bottom: 12px;
         }
 
         .yupa-status {
@@ -143,16 +158,20 @@
 <body>
 
     <div class="yupa-grid" id="team-grid">
-        <div class="yupa-status">Memuat daftar reviewer...</div>
+        <!-- Spinner Animasi Berputar Menggunakan FontAwesome -->
+        <div class="yupa-loading-container" id="loading-spinner">
+            <i class="fa-solid fa-circle-notch fa-spin yupa-spinner"></i>
+            <div>Menghubungkan ke server basis data...</div>
+        </div>
     </div>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const gridContainer = document.getElementById('team-grid');
+        const loadingSpinner = document.getElementById('loading-spinner');
         const apiUrl = 'https://script.google.com/macros/s/AKfycbwREzVUx42kFPi1pWgwUCdn0xi_ZF2GazKK5ZM2N9ZLV4f56rPy5KhKC4-yZ7lTwDvEww/exec';
         const defaultAvatar = 'https://www.w3schools.com/howto/img_avatar.png';
 
-        // Memanggil file gambar horizontal resmi dari repositori GitHub Anda
         const logoUrls = {
             scholar: 'google scholar.png', 
             scopus: 'scopus.png',
@@ -162,6 +181,7 @@
         fetch(apiUrl)
             .then(response => response.json())
             .then(data => {
+                // Menghapus spinner setelah data berhasil ditarik sepenuhnya
                 gridContainer.innerHTML = ''; 
 
                 if (!data || data.length === 0) {
@@ -200,7 +220,6 @@
 
                     const imageSrc = (foto && String(foto).trim() !== "") ? String(foto).trim() : defaultAvatar;
 
-                    // Merakit HTML untuk badge horizontal
                     let buttonsHtml = '';
                     if (linkGS && linkGS.toString().trim() !== "") {
                         buttonsHtml += `<a href="${linkGS}" target="_blank" class="yupa-btn" title="Google Scholar"><img src="${encodeURIComponent(logoUrls.scholar)}" class="logo-provider" alt="Google Scholar"></a>`;
@@ -212,7 +231,6 @@
                         buttonsHtml += `<a href="${linkSinta}" target="_blank" class="yupa-btn" title="SINTA ID"><img src="${logoUrls.sinta}" class="logo-provider" alt="SINTA"></a>`;
                     }
 
-                    // Susunan layout baru: Foto di kiri, Informasi (Nama, Kampus, & Badges) di kanan berderet ke bawah
                     card.innerHTML = `
                         <img src="${imageSrc}" alt="${nama}" class="yupa-img" onerror="this.src='${defaultAvatar}'">
                         <div class="yupa-info-wrapper">
