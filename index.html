@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reviewers Jurnal Yupa - Clean Hybrid Layout</title>
+    <title>Reviewers Jurnal Yupa - Ultra Fast Cache Engine</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
@@ -63,6 +63,8 @@
             color: #0f172a;
             margin: 0 0 5px 0;
             line-height: 1.3;
+            white-space: normal; 
+            word-wrap: break-word;
         }
         .yupa-inst {
             font-size: 0.88rem; 
@@ -73,6 +75,8 @@
             display: flex;
             align-items: center; 
             gap: 6px;
+            white-space: normal;
+            word-wrap: break-word;
         }
         .yupa-inst i { color: #0284c7; font-size: 0.9rem; }
         .yupa-links {
@@ -82,7 +86,6 @@
             gap: 10px; 
             align-items: center;
             width: 100%;
-            min-height: 25px; 
         }
         .yupa-btn {
             display: inline-flex;
@@ -95,241 +98,112 @@
         }
         .yupa-btn:hover { transform: translateY(-1.5px); filter: brightness(0.85); }
         .logo-provider { height: 100%; width: auto; object-fit: contain; display: block; }
+        .yupa-status { text-align: center; color: #64748b; font-style: italic; padding: 40px 0; grid-column: 1 / -1; }
         @media (max-width: 768px) { .yupa-grid { grid-template-columns: repeat(1, minmax(0, 1fr)); } }
     </style>
 </head>
 <body>
 
-    <!-- KODE BERSIH: Data utama langsung tayang, tanpa atribut data-username -->
-    <div class="yupa-grid" id="team-grid">
-        
-        <div class="yupa-card">
-            <div class="yupa-left-column"><img src="https://www.w3schools.com/howto/img_avatar.png" class="yupa-img"></div>
-            <div class="yupa-info-wrapper">
-                <div class="yupa-name">Sariyatun</div>
-                <div class="yupa-inst"><i class="fa-solid fa-university"></i> Universitas Sebelas Maret</div>
-                <div class="yupa-links"></div>
-            </div>
-        </div>
-
-        <div class="yupa-card">
-            <div class="yupa-left-column"><img src="https://www.w3schools.com/howto/img_avatar.png" class="yupa-img"></div>
-            <div class="yupa-info-wrapper">
-                <div class="yupa-name">Leo Agung Sutimin</div>
-                <div class="yupa-inst"><i class="fa-solid fa-university"></i> Universitas Sebelas Maret</div>
-                <div class="yupa-links"></div>
-            </div>
-        </div>
-
-        <div class="yupa-card">
-            <div class="yupa-left-column"><img src="https://www.w3schools.com/howto/img_avatar.png" class="yupa-img"></div>
-            <div class="yupa-info-wrapper">
-                <div class="yupa-name">Nunuk Suryani</div>
-                <div class="yupa-inst"><i class="fa-solid fa-university"></i> Universitas Sebelas Maret</div>
-                <div class="yupa-links"></div>
-            </div>
-        </div>
-
-        <div class="yupa-card">
-            <div class="yupa-left-column"><img src="https://www.w3schools.com/howto/img_avatar.png" class="yupa-img"></div>
-            <div class="yupa-info-wrapper">
-                <div class="yupa-name">Nur Fatah Abidin</div>
-                <div class="yupa-inst"><i class="fa-solid fa-university"></i> Universitas Sebelas Maret</div>
-                <div class="yupa-links"></div>
-            </div>
-        </div>
-
-        <div class="yupa-card">
-            <div class="yupa-left-column"><img src="https://www.w3schools.com/howto/img_avatar.png" class="yupa-img"></div>
-            <div class="yupa-info-wrapper">
-                <div class="yupa-name">Herry Porda Nugroho Putro</div>
-                <div class="yupa-inst"><i class="fa-solid fa-university"></i> Universitas Lambung Mangkurat</div>
-                <div class="yupa-links"></div>
-            </div>
-        </div>
-
-        <div class="yupa-card">
-            <div class="yupa-left-column"><img src="https://www.w3schools.com/howto/img_avatar.png" class="yupa-img"></div>
-            <div class="yupa-info-wrapper">
-                <div class="yupa-name">Heri Susanto</div>
-                <div class="yupa-inst"><i class="fa-solid fa-university"></i> Universitas Lambung Mangkurat</div>
-                <div class="yupa-links"></div>
-            </div>
-        </div>
-
-        <div class="yupa-card">
-            <div class="yupa-left-column"><img src="https://www.w3schools.com/howto/img_avatar.png" class="yupa-img"></div>
-            <div class="yupa-info-wrapper">
-                <div class="yupa-name">Mansyur</div>
-                <div class="yupa-inst"><i class="fa-solid fa-university"></i> Universitas Lambung Mangkurat</div>
-                <div class="yupa-links"></div>
-            </div>
-        </div>
-
-        <div class="yupa-card">
-            <div class="yupa-left-column"><img src="https://www.w3schools.com/howto/img_avatar.png" class="yupa-img"></div>
-            <div class="yupa-info-wrapper">
-                <div class="yupa-name">Asyrul Fikri</div>
-                <div class="yupa-inst"><i class="fa-solid fa-university"></i> Universitas Riau</div>
-                <div class="yupa-links"></div>
-            </div>
-        </div>
-
-        <div class="yupa-card">
-            <div class="yupa-left-column"><img src="https://www.w3schools.com/howto/img_avatar.png" class="yupa-img"></div>
-            <div class="yupa-info-wrapper">
-                <div class="yupa-name">Ahmad Muhajir</div>
-                <div class="yupa-inst"><i class="fa-solid fa-university"></i> Universitas Andalas</div>
-                <div class="yupa-links"></div>
-            </div>
-        </div>
-
-        <div class="yupa-card">
-            <div class="yupa-left-column"><img src="https://www.w3schools.com/howto/img_avatar.png" class="yupa-img"></div>
-            <div class="yupa-info-wrapper">
-                <div class="yupa-name">Aksa</div>
-                <div class="yupa-inst"><i class="fa-solid fa-university"></i> UIN Alauddin Makassar</div>
-                <div class="yupa-links"></div>
-            </div>
-        </div>
-
-        <div class="yupa-card">
-            <div class="yupa-left-column"><img src="https://www.w3schools.com/howto/img_avatar.png" class="yupa-img"></div>
-            <div class="yupa-info-wrapper">
-                <div class="yupa-name">Muhammad Rezky Noor Handy</div>
-                <div class="yupa-inst"><i class="fa-solid fa-university"></i> Universitas Lambung Mangkurat</div>
-                <div class="yupa-links"></div>
-            </div>
-        </div>
-
-        <div class="yupa-card">
-            <div class="yupa-left-column"><img src="https://www.w3schools.com/howto/img_avatar.png" class="yupa-img"></div>
-            <div class="yupa-info-wrapper">
-                <div class="yupa-name">Piki Setri Pernantah</div>
-                <div class="yupa-inst"><i class="fa-solid fa-university"></i> Universitas Riau</div>
-                <div class="yupa-links"></div>
-            </div>
-        </div>
-
-        <div class="yupa-card">
-            <div class="yupa-left-column"><img src="https://www.w3schools.com/howto/img_avatar.png" class="yupa-img"></div>
-            <div class="yupa-info-wrapper">
-                <div class="yupa-name">Fauzan Syahru Ramadhan</div>
-                <div class="yupa-inst"><i class="fa-solid fa-university"></i> Universitas Diponegoro</div>
-                <div class="yupa-links"></div>
-            </div>
-        </div>
-
-        <div class="yupa-card">
-            <div class="yupa-left-column"><img src="https://www.w3schools.com/howto/img_avatar.png" class="yupa-img"></div>
-            <div class="yupa-info-wrapper">
-                <div class="yupa-name">Bunari</div>
-                <div class="yupa-inst"><i class="fa-solid fa-university"></i> Universitas Riau</div>
-                <div class="yupa-links"></div>
-            </div>
-        </div>
-
-        <div class="yupa-card">
-            <div class="yupa-left-column"><img src="https://www.w3schools.com/howto/img_avatar.png" class="yupa-img"></div>
-            <div class="yupa-info-wrapper">
-                <div class="yupa-name">Yanuar Al Fiqri</div>
-                <div class="yupa-inst"><i class="fa-solid fa-university"></i> Universitas Riau</div>
-                <div class="yupa-links"></div>
-            </div>
-        </div>
-
-        <div class="yupa-card">
-            <div class="yupa-left-column"><img src="https://www.w3schools.com/howto/img_avatar.png" class="yupa-img"></div>
-            <div class="yupa-info-wrapper">
-                <div class="yupa-name">Firza</div>
-                <div class="yupa-inst"><i class="fa-solid fa-university"></i> Universitas Negeri Padang</div>
-                <div class="yupa-links"></div>
-            </div>
-        </div>
-
-        <div class="yupa-card">
-            <div class="yupa-left-column"><img src="https://www.w3schools.com/howto/img_avatar.png" class="yupa-img"></div>
-            <div class="yupa-info-wrapper">
-                <div class="yupa-name">Rulianto</div>
-                <div class="yupa-inst"><i class="fa-solid fa-university"></i> Universitas Mahasaraswati Denpasar</div>
-                <div class="yupa-links"></div>
-            </div>
-        </div>
-
-        <div class="yupa-card">
-            <div class="yupa-left-column"><img src="https://www.w3schools.com/howto/img_avatar.png" class="yupa-img"></div>
-            <div class="yupa-info-wrapper">
-                <div class="yupa-name">Dewicca Fatma Nadilla</div>
-                <div class="yupa-inst"><i class="fa-solid fa-university"></i> Universitas Lambung Mangkurat</div>
-                <div class="yupa-links"></div>
-            </div>
-        </div>
-
-    </div>
+    <!-- Grid Kontainer Utama (Akan terisi otomatis secara instan dari Cache / Cloud) -->
+    <div class="yupa-grid" id="team-grid"></div>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // Jalur Web App ID Teranyar dengan fitur anti-cache otomatis
+        const gridContainer = document.getElementById('team-grid');
+        
+        // Menggunakan Web App ID Rilisan Teranyar Anda dengan parameter Anti-Cache Dinamis
         const apiUrl = 'https://script.google.com/macros/s/AKfycbyhFxkrB4QKeqSNmPYGH1qlU2y6F_PdJuAxitHeb7GOSj3DlIA2UUk3VLZdSlhtq8jfmg/exec?_cb=' + new Date().getTime();
         
+        const defaultAvatar = 'https://www.w3schools.com/howto/img_avatar.png';
         const logoUrls = { scholar: 'google scholar.png', scopus: 'scopus.png', sinta: 'sinta.jpg', orcid: 'orcid.jpg' };
+        
+        // Kunci unik penyimpanan cache lokal di browser pengunjung
+        const CACHE_KEY = 'yupa_reviewers_data_cache';
 
-        // Mengumpulkan seluruh elemen kartu reviewer yang tertulis statis di atas
-        const cardElements = document.querySelectorAll('.yupa-card');
+        // FUNGSI UTAMA: Merender barisan kartu reviewer ke layar
+        function renderDataGrid(data) {
+            if (!data || data.length === 0) return;
+            
+            gridContainer.innerHTML = ''; 
+            data.forEach(item => {
+                const cleanItem = {};
+                for (let key in item) {
+                    cleanItem[key.toLowerCase().replace(/[^a-z0-9]/g, '')] = item[key];
+                }
 
+                let nama = cleanItem['nama'] || '';
+                const institusi = cleanItem['institusi'] || '';
+                const linkGS = cleanItem['googlescholar'] || cleanItem['linkgs'] || '';
+                const linkSinta = cleanItem['sintaid'] || cleanItem['linksinta'] || '';
+                const linkScopus = cleanItem['scopusid'] || cleanItem['linkscopus'] || '';
+                const linkOrcid = cleanItem['orcid'] || cleanItem['linkorcid'] || cleanItem['orcidid'] || '';
+                const foto = cleanItem['foto'] || cleanItem['fotogs'] || '';
+
+                if (!nama || String(nama).trim() === "") return;
+
+                const card = document.createElement('div');
+                card.className = 'yupa-card';
+                const imageSrc = (foto && String(foto).trim() !== "") ? String(foto).trim() : defaultAvatar;
+
+                let buttonsHtml = '';
+                if (linkGS && linkGS.toString().trim() !== "") {
+                    buttonsHtml += `<a href="${linkGS}" target="_blank" class="yupa-btn" title="Google Scholar"><img src="${encodeURIComponent(logoUrls.scholar)}" class="logo-provider" alt="Google Scholar"></a>`;
+                }
+                if (linkScopus && linkScopus.toString().trim() !== "") {
+                    buttonsHtml += `<a href="${linkScopus}" target="_blank" class="yupa-btn" title="Scopus"><img src="${logoUrls.scopus}" class="logo-provider" alt="Scopus"></a>`;
+                }
+                if (linkSinta && linkSinta.toString().trim() !== "") {
+                    buttonsHtml += `<a href="${linkSinta}" target="_blank" class="yupa-btn" title="SINTA ID"><img src="${logoUrls.sinta}" class="logo-provider" alt="SINTA"></a>`;
+                }
+                if (linkOrcid && linkOrcid.toString().trim() !== "") {
+                    buttonsHtml += `<a href="${linkOrcid}" target="_blank" class="yupa-btn" title="ORCID iD"><img src="${logoUrls.orcid}" class="logo-provider" alt="ORCID"></a>`;
+                }
+
+                card.innerHTML = `
+                    <div class="yupa-left-column"><img src="${imageSrc}" alt="${nama}" class="yupa-img" onerror="this.src='${defaultAvatar}'"></div>
+                    <div class="yupa-info-wrapper">
+                        <div class="yupa-name">${nama}</div>
+                        <div class="yupa-inst"><i class="fa-solid fa-university"></i> ${institusi}</div>
+                        <div class="yupa-links">${buttonsHtml}</div>
+                    </div>
+                `;
+                gridContainer.appendChild(card);
+            });
+        }
+
+        // STRATEGI 1: Ambil data dari cache Lokal (LocalStorage) & langsung render (0 Detik)
+        const dataCacheLokal = localStorage.getItem(CACHE_KEY);
+        if (dataCacheLokal) {
+            console.log("Menampilkan data dari cache lokal secara instan...");
+            renderDataGrid(JSON.parse(dataCacheLokal));
+        } else {
+            // Tampilan pengaman jika pengunjung baru pertama kali membuka web dan belum punya cache
+            gridContainer.innerHTML = '<div class="yupa-status"><i class="fa-solid fa-circle-notch fa-spin"></i> Menghubungkan ke server basis data...</div>';
+        }
+
+        // STRATEGI 2: Jalankan proses fetching di latar belakang untuk mengecek update spreadsheet
         fetch(apiUrl)
             .then(response => response.json())
-            .then(data => {
-                data.forEach(item => {
-                    const cleanItem = {};
-                    for (let key in item) {
-                        cleanItem[key.toLowerCase().replace(/[^a-z0-9]/g, '')] = item[key];
+            .then(dataCloud => {
+                if (dataCloud && dataCloud.length > 0) {
+                    const stringDataCloud = JSON.stringify(dataCloud);
+                    
+                    // Cek apakah data di spreadsheet berbeda dengan data cache lokal
+                    if (stringDataCloud !== dataCacheLokal) {
+                        console.log("Menemukan pembaruan data di spreadsheet! Memperbarui tampilan...");
+                        localStorage.setItem(CACHE_KEY, stringDataCloud); // Simpan data baru ke cache
+                        renderDataGrid(dataCloud); // Live update data baru ke layar
+                    } else {
+                        console.log("Tidak ada perubahan di spreadsheet. Tetap gunakan cache.");
                     }
-
-                    // SISTEM PENCOCOKAN BARU: Menggunakan nama lengkap murni dari spreadsheet
-                    const namaDariCloud = String(cleanItem['nama'] || '').toLowerCase().trim();
-                    if (!namaDariCloud) return;
-
-                    // Mencari kartu yang teks namanya cocok secara presisi
-                    cardElements.forEach(card => {
-                        const nameElement = card.querySelector('.yupa-name');
-                        if (nameElement && nameElement.textContent.toLowerCase().trim() === namaDariCloud) {
-                            
-                            const linksContainer = card.querySelector('.yupa-links');
-                            let buttonsHtml = '';
-                            
-                            const linkGS = cleanItem['googlescholar'] || cleanItem['linkgs'] || '';
-                            const linkSinta = cleanItem['sintaid'] || cleanItem['linksinta'] || '';
-                            const linkScopus = cleanItem['scopusid'] || cleanItem['linkscopus'] || '';
-                            const linkOrcid = cleanItem['orcid'] || cleanItem['linkorcid'] || cleanItem['orcidid'] || '';
-                            const foto = cleanItem['foto'] || cleanItem['fotogs'] || '';
-
-                            // 1. Perbarui Foto Profil secara live jika ada linknya di spreadsheet
-                            if (foto && foto.toString().trim() !== "") {
-                                const imgEl = card.querySelector('.yupa-img');
-                                if (imgEl) imgEl.src = foto.toString().trim();
-                            }
-
-                            // 2. Pasang Ikon Indeksasi secara dinamis ke dalam kartu
-                            if (linkGS && linkGS.toString().trim() !== "") {
-                                buttonsHtml += `<a href="${linkGS}" target="_blank" class="yupa-btn" title="Google Scholar"><img src="${encodeURIComponent(logoUrls.scholar)}" class="logo-provider" alt="Google Scholar"></a>`;
-                            }
-                            if (linkScopus && linkScopus.toString().trim() !== "") {
-                                buttonsHtml += `<a href="${linkScopus}" target="_blank" class="yupa-btn" title="Scopus"><img src="${logoUrls.scopus}" class="logo-provider" alt="Scopus"></a>`;
-                            }
-                            if (linkSinta && linkSinta.toString().trim() !== "") {
-                                buttonsHtml += `<a href="${linkSinta}" target="_blank" class="yupa-btn" title="SINTA ID"><img src="${logoUrls.sinta}" class="logo-provider" alt="SINTA"></a>`;
-                            }
-                            if (linkOrcid && linkOrcid.toString().trim() !== "") {
-                                buttonsHtml += `<a href="${linkOrcid}" target="_blank" class="yupa-btn" title="ORCID iD"><img src="${logoUrls.orcid}" class="logo-provider" alt="ORCID"></a>`;
-                            }
-
-                            if (linksContainer) linksContainer.innerHTML = buttonsHtml;
-                        }
-                    });
-                });
+                }
             })
-            .catch(error => console.log("Menjalankan mode statis murni tanpa update field:", error));
+            .catch(error => {
+                console.error("Gagal melakukan verifikasi cloud background fetch:", error);
+                if (!dataCacheLokal) {
+                    gridContainer.innerHTML = '<div class="yupa-status" style="color: #ef4444;">Gagal memuat data dari Spreadsheet.</div>';
+                }
+            });
     });
 </script>
 </body>
