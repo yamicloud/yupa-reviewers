@@ -124,8 +124,8 @@
     document.addEventListener("DOMContentLoaded", function() {
         const outerWrapper = document.getElementById('yupa-editorial-outer-wrapper');
         
-        // ID WEB APP TERBARU SUDAH DISUNTIKKAN SECARA PRESISI DI SINI
-        const apiUrl = 'https://script.google.com/macros/s/AKfycbyoANhHH9S02o0lz_e4jeOAqs8aLcCGKxr0SUVBqkn2XqeA94ofjtbgDResI7LKV11XZg/exec?sheet=editors&_cb=' + new Date().getTime();
+        // ID WEB APP MAKSIMAL YANG BARU SAJA BAPAK KIRIMKAN SUDAH TERPASANG DI SINI
+        const apiUrl = 'https://script.google.com/macros/s/AKfycbztd0xs-52-BXxCmq8W2avjApRPyIKvaJaFCocXLtM1_VpQFl2r0D1NA4YYbF4jjIszrg/exec?sheet=editors&_cb=' + new Date().getTime();
         
         const defaultAvatar = 'https://www.w3schools.com/howto/img_avatar.png';
         const logoUrls = { scholar: 'google scholar.png', scopus: 'scopus.png', sinta: 'sinta.jpg', orcid: 'orcid.jpg' };
@@ -133,7 +133,7 @@
 
         function processAndRender(data) {
             if (!data || data.length === 0 || data.error) {
-                outerWrapper.innerHTML = `<div class="yupa-status" style="color:#ef4444;"><i class="fa-solid fa-triangle-exclamation"></i> Respon data kosong atau tidak diizinkan oleh sistem.</div>`;
+                outerWrapper.innerHTML = `<div class="yupa-status" style="color:#ef4444;"><i class="fa-solid fa-triangle-exclamation"></i> Respon data kosong atau terjadi kendala pembacaan sheet kementerian.</div>`;
                 return;
             }
             outerWrapper.innerHTML = '';
@@ -241,7 +241,7 @@
             .catch(error => { 
                 console.error("Gagal sinkronisasi data:", error);
                 if(!dataCacheLokal) {
-                    outerWrapper.innerHTML = `<div class="yupa-status" style="color:#ef4444;"><i class="fa-solid fa-network-wired"></i> Gagal terhubung ke Google API. Pastikan setelan akses Apps Script adalah 'Anyone'.</div>`;
+                    outerWrapper.innerHTML = `<div class="yupa-status" style="color:#ef4444;"><i class="fa-solid fa-network-wired"></i> Sambungan terkunci. Pastikan setelan 'Anyone' pada New Deployment Apps Script sudah benar.</div>`;
                 }
             });
     });
