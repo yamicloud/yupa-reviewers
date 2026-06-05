@@ -124,15 +124,18 @@
     document.addEventListener("DOMContentLoaded", function() {
         const outerWrapper = document.getElementById('yupa-editorial-outer-wrapper');
         
-        // WEB APP URL YANG SUDAH DIPERBARUI BERDASARKAN INPUT BAPAK
-        const apiUrl = 'https://script.google.com/macros/s/AKfycbyLpABSlAJLb9VtQCT9v7jVvitZJPxbTj41cxD-FgU8voOYJGmCdua_uloxlQu-p39nqQ/exec?sheet=editors&_cb=' + new Date().getTime();
+        // ID WEB APP TERBARU SUDAH DISUNTIKKAN SECARA PRESISI DI SINI
+        const apiUrl = 'https://script.google.com/macros/s/AKfycbyoANhHH9S02o0lz_e4jeOAqs8aLcCGKxr0SUVBqkn2XqeA94ofjtbgDResI7LKV11XZg/exec?sheet=editors&_cb=' + new Date().getTime();
         
         const defaultAvatar = 'https://www.w3schools.com/howto/img_avatar.png';
         const logoUrls = { scholar: 'google scholar.png', scopus: 'scopus.png', sinta: 'sinta.jpg', orcid: 'orcid.jpg' };
         const CACHE_KEY = 'yupa_editors_split_cache';
 
         function processAndRender(data) {
-            if (!data || data.length === 0) return;
+            if (!data || data.length === 0 || data.error) {
+                outerWrapper.innerHTML = `<div class="yupa-status" style="color:#ef4444;"><i class="fa-solid fa-triangle-exclamation"></i> Respon data kosong atau tidak diizinkan oleh sistem.</div>`;
+                return;
+            }
             outerWrapper.innerHTML = '';
 
             const chiefList = [];
@@ -202,7 +205,7 @@
 
             let buttonsHtml = '';
             if (linkGS && linkGS.toString().trim() !== "") { buttonsHtml += `<a href="${linkGS}" target="_blank" class="yupa-btn" title="Google Scholar"><img src="${encodeURIComponent(logoUrls.scholar)}" class="logo-provider" alt="Google Scholar"></a>`; }
-            if (linkScopus && linkScopus.toString().trim() !== "") { buttonsHtml += `<a href="${linkScopus}" target="_blank" class="yupa-btn" title="Scopus"><img src="${logoUrls.scopus}??_" class="logo-provider" alt="Scopus"></a>`; }
+            if (linkScopus && linkScopus.toString().trim() !== "") { buttonsHtml += `<a href="${linkScopus}" target="_blank" class="yupa-btn" title="Scopus"><img src="${logoUrls.scopus}" class="logo-provider" alt="Scopus"></a>`; }
             if (linkSinta && linkSinta.toString().trim() !== "") { buttonsHtml += `<a href="${linkSinta}" target="_blank" class="yupa-btn" title="SINTA ID"><img src="${logoUrls.sinta}" class="logo-provider" alt="SINTA"></a>`; }
             if (linkOrcid && linkOrcid.toString().trim() !== "") { buttonsHtml += `<a href="${linkOrcid}" target="_blank" class="yupa-btn" title="ORCID iD"><img src="${logoUrls.orcid}" class="logo-provider" alt="ORCID"></a>`; }
 
@@ -235,7 +238,12 @@
                     }
                 }
             })
-            .catch(error => { console.error("Gagal sinkronisasi data:", error); });
+            .catch(error => { 
+                console.error("Gagal sinkronisasi data:", error);
+                if(!dataCacheLokal) {
+                    outerWrapper.innerHTML = `<div class="yupa-status" style="color:#ef4444;"><i class="fa-solid fa-network-wired"></i> Gagal terhubung ke Google API. Pastikan setelan akses Apps Script adalah 'Anyone'.</div>`;
+                }
+            });
     });
 </script>
 </body>
