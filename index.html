@@ -125,23 +125,24 @@
                 gridContainer.innerHTML = ''; 
 
                 if (!data || data.length === 0) {
-                    gridContainer.innerHTML = '<div class="yupa-status">Belum ada data reviewer terisi di spreadsheet.</div>';
+                    gridContainer.innerHTML = '<div class="yupa-status">Data tidak ditemukan atau rilis Apps Script belum diperbarui.</div>';
                     return;
                 }
 
                 data.forEach(item => {
+                    // Bersihkan nama properti agar lowercase dan tanpa spasi
                     const cleanItem = {};
                     for (let key in item) {
-                        cleanItem[key.toLowerCase().trim()] = item[key];
+                        cleanItem[key.toLowerCase().replace(/[^a-z0-9]/g, '')] = item[key];
                     }
 
-                    // Deteksi nama dinamis
+                    // Pemetaan dinamis berbasis teks lowercase murni tanpa spasi/simbol
                     let nama = cleanItem['nama'] || '';
                     if (!nama) {
                         const keys = Object.keys(cleanItem);
                         for (let k of keys) {
                             let val = String(cleanItem[k]).trim();
-                            if (val && isNaN(val) && !val.includes("http") && k !== "institusi" && k !== "username") {
+                            if (val && isNaN(val) && !val.includes("http") && !k.includes("institut") && !k.includes("usernam")) {
                                 nama = val;
                                 break;
                             }
@@ -149,21 +150,18 @@
                     }
 
                     const institusi = cleanItem['institusi'] || '';
-                    const linkGS = cleanItem['google scholar'] || cleanItem['link_gs'] || '';
-                    const linkSinta = cleanItem['sinta id'] || cleanItem['link_sinta'] || '';
-                    const linkScopus = cleanItem['scopus id'] || cleanItem['link_scopus'] || '';
-                    const usernameGS = cleanItem['username'] || '';
+                    const linkGS = cleanItem['googlescholar'] || cleanItem['linkgs'] || '';
+                    const linkSinta = cleanItem['sintaid'] || cleanItem['linksinta'] || '';
+                    const linkScopus = cleanItem['scopusid'] || cleanItem['linkscopus'] || '';
+                    const foto = cleanItem['foto'] || cleanItem['fotogs'] || '';
 
                     if (!nama || String(nama).trim() === "") return;
 
                     const card = document.createElement('div');
                     card.className = 'yupa-card';
 
-                    // TRIK UTAMA: Merakit URL Foto Profil dari ID Username Google Scholar
-                    let imageSrc = defaultAvatar;
-                    if (usernameGS && usernameGS.toString().trim() !== "") {
-                        imageSrc = `https://scholar.googleusercontent.com/citations?user=${usernameGS.trim()}&user_image_id=`;
-                    }
+                    // Deteksi foto profil: memprioritaskan link dari kolom "Foto" spreadsheet baru Anda
+                    const imageSrc = (foto && String(foto).trim() !== "") ? String(foto).trim() : defaultAvatar;
 
                     let buttonsHtml = '';
                     if (linkGS && linkGS.toString().trim() !== "") {
