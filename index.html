@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reviewers 2-Column Compact Grid with Horizontal Badges</title>
-    <!-- Memanggil pustaka FontAwesome untuk ikon kampus dan spinner -->
+    <title>Reviewers 2-Column Compact Grid with Horizontal Badges & ORCID</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
@@ -79,7 +78,7 @@
         .yupa-inst {
             font-size: 0.74rem;
             color: #64748b;
-            margin: 0 0 6px 0;
+            margin: 0;
             line-height: 1.3;
             display: flex;
             align-items: center;
@@ -94,12 +93,13 @@
             font-size: 0.75rem;
         }
 
-        /* Pembungkus baru untuk tombol horizontal di bawah institusi */
+        /* Pembungkus untuk tombol horizontal di bawah nama institusi */
         .yupa-links {
             display: flex;
             flex-wrap: wrap;
             gap: 6px;
             align-items: center;
+            margin-top: 6px;
         }
 
         /* Tombol penampung badge persegi panjang horizontal */
@@ -109,8 +109,8 @@
             justify-content: center;
             text-decoration: none;
             transition: all 0.2s ease;
-            height: 24px; 
-            width: auto;  
+            height: 24px; /* Kunci tinggi badge agar seragam */
+            width: auto;  /* Lebar otomatis menyesuaikan bentuk horizontal logo */
         }
 
         .yupa-btn:hover {
@@ -158,7 +158,6 @@
 <body>
 
     <div class="yupa-grid" id="team-grid">
-        <!-- Spinner Animasi Berputar Menggunakan FontAwesome -->
         <div class="yupa-loading-container" id="loading-spinner">
             <i class="fa-solid fa-circle-notch fa-spin yupa-spinner"></i>
             <div>Menghubungkan ke server basis data...</div>
@@ -168,85 +167,11 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const gridContainer = document.getElementById('team-grid');
-        const loadingSpinner = document.getElementById('loading-spinner');
         const apiUrl = 'https://script.google.com/macros/s/AKfycbwREzVUx42kFPi1pWgwUCdn0xi_ZF2GazKK5ZM2N9ZLV4f56rPy5KhKC4-yZ7lTwDvEww/exec';
         const defaultAvatar = 'https://www.w3schools.com/howto/img_avatar.png';
 
+        // Memanggil file gambar horizontal resmi dari repositori GitHub Anda
         const logoUrls = {
             scholar: 'google scholar.png', 
             scopus: 'scopus.png',
-            sinta: 'sinta.jpg'
-        };
-
-        fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-                // Menghapus spinner setelah data berhasil ditarik sepenuhnya
-                gridContainer.innerHTML = ''; 
-
-                if (!data || data.length === 0) {
-                    gridContainer.innerHTML = '<div class="yupa-status">Belum ada data reviewer terisi di spreadsheet.</div>';
-                    return;
-                }
-
-                data.forEach(item => {
-                    const cleanItem = {};
-                    for (let key in item) {
-                        cleanItem[key.toLowerCase().replace(/[^a-z0-9]/g, '')] = item[key];
-                    }
-
-                    let nama = cleanItem['nama'] || '';
-                    if (!nama) {
-                        const keys = Object.keys(cleanItem);
-                        for (let k of keys) {
-                            let val = String(cleanItem[k]).trim();
-                            if (val && isNaN(val) && !val.includes("http") && !k.includes("institut") && !k.includes("usernam")) {
-                                nama = val;
-                                break;
-                            }
-                        }
-                    }
-
-                    const institusi = cleanItem['institusi'] || '';
-                    const linkGS = cleanItem['googlescholar'] || cleanItem['linkgs'] || '';
-                    const linkSinta = cleanItem['sintaid'] || cleanItem['linksinta'] || '';
-                    const linkScopus = cleanItem['scopusid'] || cleanItem['linkscopus'] || '';
-                    const foto = cleanItem['foto'] || cleanItem['fotogs'] || '';
-
-                    if (!nama || String(nama).trim() === "") return;
-
-                    const card = document.createElement('div');
-                    card.className = 'yupa-card';
-
-                    const imageSrc = (foto && String(foto).trim() !== "") ? String(foto).trim() : defaultAvatar;
-
-                    let buttonsHtml = '';
-                    if (linkGS && linkGS.toString().trim() !== "") {
-                        buttonsHtml += `<a href="${linkGS}" target="_blank" class="yupa-btn" title="Google Scholar"><img src="${encodeURIComponent(logoUrls.scholar)}" class="logo-provider" alt="Google Scholar"></a>`;
-                    }
-                    if (linkScopus && linkScopus.toString().trim() !== "") {
-                        buttonsHtml += `<a href="${linkScopus}" target="_blank" class="yupa-btn" title="Scopus"><img src="${logoUrls.scopus}" class="logo-provider" alt="Scopus"></a>`;
-                    }
-                    if (linkSinta && linkSinta.toString().trim() !== "") {
-                        buttonsHtml += `<a href="${linkSinta}" target="_blank" class="yupa-btn" title="SINTA ID"><img src="${logoUrls.sinta}" class="logo-provider" alt="SINTA"></a>`;
-                    }
-
-                    card.innerHTML = `
-                        <img src="${imageSrc}" alt="${nama}" class="yupa-img" onerror="this.src='${defaultAvatar}'">
-                        <div class="yupa-info-wrapper">
-                            <div class="yupa-name">${nama}</div>
-                            <div class="yupa-inst"><i class="fa-solid fa-university"></i> ${institusi}</div>
-                            <div class="yupa-links">${buttonsHtml}</div>
-                        </div>
-                    `;
-                    gridContainer.appendChild(card);
-                });
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                gridContainer.innerHTML = '<div class="yupa-status" style="color: #ef4444;">Gagal memuat data dari Spreadsheet.</div>';
-            });
-    });
-</script>
-</body>
-</html>
+            sinta
