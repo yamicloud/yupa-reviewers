@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reviewers 2-Column Compact Grid with Repository Logos</title>
+    <title>Reviewers 2-Column Compact Grid with Horizontal Badges</title>
     <!-- Memanggil pustaka FontAwesome untuk ikon kampus -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -52,11 +52,11 @@
             object-fit: cover;
             border: 2px solid #f1f5f9;
             background-color: #f8fafc;
-            margin-right: 12px;
+            margin-right: 14px;
             flex-shrink: 0;
         }
 
-        /* Pembungkus informasi nama dan kampus */
+        /* Pembungkus informasi teks utama */
         .yupa-info-wrapper {
             display: flex;
             flex-direction: column;
@@ -68,7 +68,7 @@
             font-size: 0.88rem;
             font-weight: 600;
             color: #1e293b;
-            margin: 0 0 4px 0;
+            margin: 0 0 3px 0;
             line-height: 1.3;
             white-space: nowrap;
             overflow: hidden;
@@ -79,7 +79,7 @@
         .yupa-inst {
             font-size: 0.74rem;
             color: #64748b;
-            margin: 0;
+            margin: 0 0 6px 0;
             line-height: 1.3;
             display: flex;
             align-items: center;
@@ -94,56 +94,36 @@
             font-size: 0.75rem;
         }
 
-        /* Pembungkus tombol logo di sisi kanan kartu */
+        /* Pembungkus baru untuk tombol horizontal di bawah institusi */
         .yupa-links {
             display: flex;
+            flex-wrap: wrap;
             gap: 6px;
-            margin-left: 10px;
-            flex-shrink: 0;
+            align-items: center;
         }
 
-        /* Tombol lingkaran penampung logo */
+        /* Tombol penampung badge persegi panjang horizontal */
         .yupa-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 30px;
-            height: 30px;
             text-decoration: none;
-            border-radius: 50%;
             transition: all 0.2s ease;
-            background-color: #ffffff;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            height: 24px; /* Kunci tinggi badge agar seragam */
+            width: auto;  /* Lebar otomatis menyesuaikan bentuk horizontal logo */
         }
 
         .yupa-btn:hover {
             transform: translateY(-1px);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.08);
-            border-color: #cbd5e1;
+            filter: brightness(0.95);
         }
 
-        /* Pengaturan ukuran logo agar pas dan rapi di dalam lingkaran */
+        /* Pengaturan gambar logo persegi panjang agar proporsional */
         .logo-provider {
-            width: 18px;
-            height: 18px;
+            height: 100%;
+            width: auto;
             object-fit: contain;
-        }
-
-        .logo-scopus {
-            width: 16px;
-            height: 16px;
-        }
-
-        .logo-sinta {
-            width: 18px;
-            height: 18px;
-            border-radius: 50%; /* Mengikuti bentuk lingkaran jika file aslinya kotak */
-        }
-
-        .logo-gs {
-            width: 18px;
-            height: 18px;
+            display: block;
         }
 
         .yupa-status {
@@ -172,9 +152,9 @@
         const apiUrl = 'https://script.google.com/macros/s/AKfycbwREzVUx42kFPi1pWgwUCdn0xi_ZF2GazKK5ZM2N9ZLV4f56rPy5KhKC4-yZ7lTwDvEww/exec';
         const defaultAvatar = 'https://www.w3schools.com/howto/img_avatar.png';
 
-        // MEMANGGIL LANGSUNG FILE REPOSITORI LOKAL YANG ANDA SEDIAKAN
+        // Memanggil file gambar horizontal resmi dari repositori GitHub Anda
         const logoUrls = {
-            scholar: 'google scholar.png', // Menangani spasi nama file dengan aman
+            scholar: 'google scholar.png', 
             scopus: 'scopus.png',
             sinta: 'sinta.jpg'
         };
@@ -220,25 +200,26 @@
 
                     const imageSrc = (foto && String(foto).trim() !== "") ? String(foto).trim() : defaultAvatar;
 
+                    // Merakit HTML untuk badge horizontal
                     let buttonsHtml = '';
                     if (linkGS && linkGS.toString().trim() !== "") {
-                        // Menggunakan encodeURIComponent untuk menangani file "google scholar.png" yang memakai spasi asli
-                        buttonsHtml += `<a href="${linkGS}" target="_blank" class="yupa-btn" title="Google Scholar"><img src="${encodeURIComponent(logoUrls.scholar)}" class="logo-provider logo-gs" alt="GS"></a>`;
+                        buttonsHtml += `<a href="${linkGS}" target="_blank" class="yupa-btn" title="Google Scholar"><img src="${encodeURIComponent(logoUrls.scholar)}" class="logo-provider" alt="Google Scholar"></a>`;
                     }
                     if (linkScopus && linkScopus.toString().trim() !== "") {
-                        buttonsHtml += `<a href="${linkScopus}" target="_blank" class="yupa-btn" title="Scopus"><img src="${logoUrls.scopus}" class="logo-provider logo-scopus" alt="Scopus"></a>`;
+                        buttonsHtml += `<a href="${linkScopus}" target="_blank" class="yupa-btn" title="Scopus"><img src="${logoUrls.scopus}" class="logo-provider" alt="Scopus"></a>`;
                     }
                     if (linkSinta && linkSinta.toString().trim() !== "") {
-                        buttonsHtml += `<a href="${linkSinta}" target="_blank" class="yupa-btn" title="SINTA ID"><img src="${logoUrls.sinta}" class="logo-provider logo-sinta" alt="Sinta"></a>`;
+                        buttonsHtml += `<a href="${linkSinta}" target="_blank" class="yupa-btn" title="SINTA ID"><img src="${logoUrls.sinta}" class="logo-provider" alt="SINTA"></a>`;
                     }
 
+                    // Susunan layout baru: Foto di kiri, Informasi (Nama, Kampus, & Badges) di kanan berderet ke bawah
                     card.innerHTML = `
                         <img src="${imageSrc}" alt="${nama}" class="yupa-img" onerror="this.src='${defaultAvatar}'">
                         <div class="yupa-info-wrapper">
                             <div class="yupa-name">${nama}</div>
                             <div class="yupa-inst"><i class="fa-solid fa-university"></i> ${institusi}</div>
+                            <div class="yupa-links">${buttonsHtml}</div>
                         </div>
-                        <div class="yupa-links">${buttonsHtml}</div>
                     `;
                     gridContainer.appendChild(card);
                 });
