@@ -148,16 +148,21 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const gridContainer = document.getElementById('team-grid');
-        
-        // KOREKSI UTAMA: Menggunakan ID Deployment asli Anda tanpa typo
+        // ID rilis resmi yang sudah dikoreksi tanpa typo huruf kecil l
         const apiUrl = 'https://script.google.com/macros/s/AKfycbwREzVUx42kFPi1pWgwUCdn0xi_ZF2GazKK5ZM2N9ZLV4f56rPy5KhKC4-yZ7lTwDvEww/exec';
         const defaultAvatar = 'https://www.w3schools.com/howto/img_avatar.png';
 
-        // Fungsi bantu mengirimkan total tinggi konten asli ke halaman induk (OJS)
+        // Fungsi real-time pengirim tinggi halaman asli ke OJS
         function kirimTinggiKeOJS() {
             const tinggiKonten = document.documentElement.scrollHeight || document.body.scrollHeight;
             window.parent.postMessage({ 'tinggiIframe': tinggiKonten }, '*');
         }
+
+        // TEKNOLOGI BARU: Memantau perubahan tinggi halaman secara instan (termasuk saat foto selesai di-load)
+        const observer = new ResizeObserver(() => {
+            kirimTinggiKeOJS();
+        });
+        observer.observe(document.body);
 
         fetch(apiUrl)
             .then(response => response.json())
@@ -166,18 +171,15 @@
 
                 if (!data || data.length === 0) {
                     gridContainer.innerHTML = '<div class="yupa-status">Belum ada data reviewer terisi di spreadsheet.</div>';
-                    kirimTinggiKeOJS();
                     return;
                 }
 
                 data.forEach(item => {
-                    // Bersihkan nama properti objek agar lowercase dan tanpa spasi/simbol
                     const cleanItem = {};
                     for (let key in item) {
                         cleanItem[key.toLowerCase().replace(/[^a-z0-9]/g, '')] = item[key];
                     }
 
-                    // Deteksi nama dinamis cerdas
                     let nama = cleanItem['nama'] || '';
                     if (!nama) {
                         const keys = Object.keys(cleanItem);
@@ -203,7 +205,6 @@
 
                     const imageSrc = (foto && String(foto).trim() !== "") ? String(foto).trim() : defaultAvatar;
 
-                    // Merakit tombol kustom berbentuk ikon bundar minimalis
                     let buttonsHtml = '';
                     if (linkGS && linkGS.toString().trim() !== "") {
                         buttonsHtml += `<a href="${linkGS}" target="_blank" class="yupa-btn yp-gs" title="Google Scholar"><i class="fa-solid fa-graduation-cap"></i></a>`;
@@ -225,20 +226,14 @@
                     `;
                     gridContainer.appendChild(card);
                 });
-
-                // Kirim tinggi konten sesaat setelah semua kartu berhasil dimuat
-                setTimeout(kirimTinggiKeOJS, 300);
+                
+                // Memicu kalkulasi tinggi ulang sesaat setelah semua data kartunya selesai dirender
+                kirimTinggiKeOJS();
             })
             .catch(error => {
                 console.error('Error:', error);
                 gridContainer.innerHTML = '<div class="yupa-status" style="color: #ef4444;">Gagal memuat data dari Spreadsheet.</div>';
-                kirimTinggiKeOJS();
             });
-
-        // Pemicu ulang kirim tinggi jika ukuran layar desktop/mobile berubah
-        window.addEventListener('resize', () => {
-            setTimeout(kirimTinggiKeOJS, 200);
-        });
     });
 </script>
 </body>
