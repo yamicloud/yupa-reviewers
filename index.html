@@ -53,9 +53,19 @@
             font-size: 0.95rem;
             font-weight: 600;
             color: #1e293b;
-            margin-bottom: 16px;
+            margin-bottom: 6px;
             line-height: 1.4;
             min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .yupa-inst {
+            font-size: 0.78rem;
+            color: #64748b;
+            margin-bottom: 16px;
+            min-height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -105,7 +115,6 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const gridContainer = document.getElementById('team-grid');
-        // Langsung menggunakan URL API dari ID rilis Spreadsheet Yupa Anda
         const apiUrl = 'https://script.google.com/macros/s/AKfycbwREzVUx42kFPi1pWgwUCdn0xi_ZF2GazKK5ZM2N9ZLV4f56rPy5KhKC4-yZ7lTwDvEww/exec';
         const defaultAvatar = 'https://www.w3schools.com/howto/img_avatar.png';
 
@@ -115,43 +124,42 @@
                 gridContainer.innerHTML = ''; 
 
                 if (!data || data.length === 0) {
-                    gridContainer.innerHTML = '<div class="yupa-status">Belum ada data reviewer terisi di spreadsheet.</div>';
+                    gridContainer.innerHTML = '<div class="yupa-status">Belum ada data reviewer atau format sheet salah.</div>';
                     return;
                 }
 
                 data.forEach(item => {
-                    const cleanItem = {};
-                    for (let key in item) {
-                        cleanItem[key.toLowerCase().trim()] = item[key];
-                    }
+                    // Penyesuaian pemetaan objek berdasarkan header kolom riil di gambar Anda
+                    const nama = item['No'] || item['Nama'] || ''; // Mengambil kolom nama di sebelah institusi
+                    const institusi = item['Institusi'] || '';
+                    const linkGS = item['Google Scholar'] || '';
+                    const linkSinta = item['SINTA ID'] || '';
+                    const linkScopus = item['Scopus ID'] || '';
+                    
+                    // Untuk foto, karena di gambar Anda belum ada kolom foto khusus, 
+                    // skrip ini akan otomatis menggunakan avatar default untuk sementara waktu.
+                    const imageSrc = defaultAvatar; 
 
-                    const nama = cleanItem['nama'] || '';
-                    const foto = cleanItem['foto_gs'] || cleanItem['foto'] || '';
-                    const linkGS = cleanItem['link_gs'] || cleanItem['scholar'] || '';
-                    const linkScopus = cleanItem['link_scopus'] || cleanItem['scopus'] || '';
-                    const linkSinta = cleanItem['link_sinta'] || cleanItem['sinta'] || '';
-
-                    if (nama.trim() === "") return;
+                    if (nama.toString().trim() === "" || nama.toString().includes("http")) return;
 
                     const card = document.createElement('div');
                     card.className = 'yupa-card';
 
-                    const imageSrc = (foto && foto.trim() !== "") ? foto : defaultAvatar;
-
                     let buttonsHtml = '';
-                    if (linkGS && linkGS.trim() !== "") {
+                    if (linkGS && linkGS.toString().trim() !== "") {
                         buttonsHtml += `<a href="${linkGS}" target="_blank" class="yupa-btn yp-gs">Scholar</a>`;
                     }
-                    if (linkScopus && linkScopus.trim() !== "") {
+                    if (linkScopus && linkScopus.toString().trim() !== "") {
                         buttonsHtml += `<a href="${linkScopus}" target="_blank" class="yupa-btn yp-scopus">Scopus</a>`;
                     }
-                    if (linkSinta && linkSinta.trim() !== "") {
+                    if (linkSinta && linkSinta.toString().trim() !== "") {
                         buttonsHtml += `<a href="${linkSinta}" target="_blank" class="yupa-btn yp-sinta">Sinta</a>`;
                     }
 
                     card.innerHTML = `
-                        <img src="${imageSrc}" alt="${nama}" class="yupa-img" onerror="this.src='${defaultAvatar}'">
+                        <img src="${imageSrc}" alt="${nama}" class="yupa-img">
                         <div class="yupa-name">${nama}</div>
+                        <div class="yupa-inst">${institusi}</div>
                         <div class="yupa-links">${buttonsHtml}</div>
                     `;
                     gridContainer.appendChild(card);
@@ -159,7 +167,7 @@
             })
             .catch(error => {
                 console.error('Error:', error);
-                gridContainer.innerHTML = '<div class="yupa-status" style="color: #ef4444;">Gagal memuat data dari Spreadsheet.</div>';
+                gridContainer.innerHTML = '<div class="yupa-status" style="color: #ef4444;">Gagal memuat data. Periksa kembali deployment Apps Script Anda.</div>';
             });
     });
 </script>
