@@ -3,88 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reviewers Dynamic Cards</title>
+    <title>Reviewers Vertical Cards</title>
     <style>
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background-color: transparent; 
             margin: 0;
-            padding: 10px;
+            padding: 5px;
+            /* Menghilangkan scrollbar internal dari dalam iframe */
+            overflow: hidden; 
         }
 
+        /* PERBAIKAN: Mengubah susunan menjadi 1 kolom vertikal ke bawah */
         .yupa-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px; /* Jarak antar kartu lebih rapat */
             width: 100%;
             box-sizing: border-box;
         }
 
+        /* PERBAIKAN: Desain kartu horizontal-vertikal kompak (hemat ruang) */
         .yupa-card {
             background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
-            padding: 24px 16px;
-            text-align: center;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+            padding: 12px 16px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.01);
             display: flex;
-            flex-direction: column;
+            flex-direction: row; /* Foto dan Teks berjejer kesamping dalam satu baris */
             align-items: center;
+            justify-content: flex-start;
+            text-align: left;
             box-sizing: border-box;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: border-color 0.2s;
         }
 
         .yupa-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.05);
             border-color: #cbd5e1;
+            background-color: #f8fafc;
         }
 
+        /* Foto dibuat sedikit lebih kompak */
         .yupa-img {
-            width: 85px;
-            height: 85px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             object-fit: cover;
-            margin-bottom: 14px;
             border: 2px solid #f1f5f9;
             background-color: #f8fafc;
+            margin-right: 16px; /* Jarak foto ke teks */
+            flex-shrink: 0;
+        }
+
+        /* Pembungkus teks nama dan institusi */
+        .yupa-info-wrapper {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
         }
 
         .yupa-name {
             font-size: 0.95rem;
             font-weight: 600;
             color: #1e293b;
-            margin-bottom: 6px;
-            line-height: 1.4;
-            min-height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            margin: 0 0 3px 0;
+            line-height: 1.3;
         }
 
         .yupa-inst {
             font-size: 0.78rem;
             color: #64748b;
-            margin-bottom: 16px;
-            min-height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            margin: 0;
+            line-height: 1.3;
         }
 
+        /* Pembungkus tombol di sisi paling kanan */
         .yupa-links {
             display: flex;
-            justify-content: center;
             gap: 6px;
-            flex-wrap: wrap;
-            margin-top: auto;
+            margin-left: 16px;
+            flex-shrink: 0;
         }
 
         .yupa-btn {
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             text-decoration: none;
-            padding: 5px 12px;
-            border-radius: 15px;
+            padding: 4px 10px;
+            border-radius: 12px;
             font-weight: 600;
             transition: all 0.2s ease;
         }
@@ -102,15 +108,21 @@
             text-align: center;
             color: #64748b;
             font-style: italic;
-            padding: 30px 0;
-            grid-column: 1 / -1;
+            padding: 20px 0;
+        }
+
+        /* Responsif: Jika layar hp sangat kecil, tombol turun ke bawah teks */
+        @media (max-width: 480px) {
+            .yupa-card { flex-direction: column; align-items: flex-start; text-align: left; }
+            .yupa-img { margin-bottom: 10px; }
+            .yupa-links { margin-left: 0; margin-top: 10px; }
         }
     </style>
 </head>
 <body>
 
     <div class="yupa-grid" id="team-grid">
-        <div class="yupa-status">Memuat daftar reviewer secara realtime...</div>
+        <div class="yupa-status">Memuat daftar reviewer...</div>
     </div>
 
 <script>
@@ -125,18 +137,16 @@
                 gridContainer.innerHTML = ''; 
 
                 if (!data || data.length === 0) {
-                    gridContainer.innerHTML = '<div class="yupa-status">Data tidak ditemukan atau rilis Apps Script belum diperbarui.</div>';
+                    gridContainer.innerHTML = '<div class="yupa-status">Belum ada data reviewer terisi di spreadsheet.</div>';
                     return;
                 }
 
                 data.forEach(item => {
-                    // Bersihkan nama properti agar lowercase dan tanpa spasi
                     const cleanItem = {};
                     for (let key in item) {
                         cleanItem[key.toLowerCase().replace(/[^a-z0-9]/g, '')] = item[key];
                     }
 
-                    // Pemetaan dinamis berbasis teks lowercase murni tanpa spasi/simbol
                     let nama = cleanItem['nama'] || '';
                     if (!nama) {
                         const keys = Object.keys(cleanItem);
@@ -160,7 +170,6 @@
                     const card = document.createElement('div');
                     card.className = 'yupa-card';
 
-                    // Deteksi foto profil: memprioritaskan link dari kolom "Foto" spreadsheet baru Anda
                     const imageSrc = (foto && String(foto).trim() !== "") ? String(foto).trim() : defaultAvatar;
 
                     let buttonsHtml = '';
@@ -176,8 +185,10 @@
 
                     card.innerHTML = `
                         <img src="${imageSrc}" alt="${nama}" class="yupa-img" onerror="this.src='${defaultAvatar}'">
-                        <div class="yupa-name">${nama}</div>
-                        <div class="yupa-inst">${institusi}</div>
+                        <div class="yupa-info-wrapper">
+                            <div class="yupa-name">${nama}</div>
+                            <div class="yupa-inst">${institusi}</div>
+                        </div>
                         <div class="yupa-links">${buttonsHtml}</div>
                     `;
                     gridContainer.appendChild(card);
