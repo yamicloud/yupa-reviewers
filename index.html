@@ -47,6 +47,7 @@
             object-fit: cover;
             margin-bottom: 14px;
             border: 2px solid #f1f5f9;
+            background-color: #f8fafc;
         }
 
         .yupa-name {
@@ -124,26 +125,45 @@
                 gridContainer.innerHTML = ''; 
 
                 if (!data || data.length === 0) {
-                    gridContainer.innerHTML = '<div class="yupa-status">Belum ada data reviewer atau format sheet salah.</div>';
+                    gridContainer.innerHTML = '<div class="yupa-status">Belum ada data reviewer terisi di spreadsheet.</div>';
                     return;
                 }
 
                 data.forEach(item => {
-                    // Penyesuaian pemetaan objek berdasarkan header kolom riil di gambar Anda
-                    const nama = item['No'] || item['Nama'] || ''; // Mengambil kolom nama di sebelah institusi
-                    const institusi = item['Institusi'] || '';
-                    const linkGS = item['Google Scholar'] || '';
-                    const linkSinta = item['SINTA ID'] || '';
-                    const linkScopus = item['Scopus ID'] || '';
-                    
-                    // Untuk foto, karena di gambar Anda belum ada kolom foto khusus, 
-                    // skrip ini akan otomatis menggunakan avatar default untuk sementara waktu.
-                    const imageSrc = defaultAvatar; 
+                    const cleanItem = {};
+                    for (let key in item) {
+                        cleanItem[key.toLowerCase().trim()] = item[key];
+                    }
 
-                    if (nama.toString().trim() === "" || nama.toString().includes("http")) return;
+                    // Deteksi nama dinamis
+                    let nama = cleanItem['nama'] || '';
+                    if (!nama) {
+                        const keys = Object.keys(cleanItem);
+                        for (let k of keys) {
+                            let val = String(cleanItem[k]).trim();
+                            if (val && isNaN(val) && !val.includes("http") && k !== "institusi" && k !== "username") {
+                                nama = val;
+                                break;
+                            }
+                        }
+                    }
+
+                    const institusi = cleanItem['institusi'] || '';
+                    const linkGS = cleanItem['google scholar'] || cleanItem['link_gs'] || '';
+                    const linkSinta = cleanItem['sinta id'] || cleanItem['link_sinta'] || '';
+                    const linkScopus = cleanItem['scopus id'] || cleanItem['link_scopus'] || '';
+                    const usernameGS = cleanItem['username'] || '';
+
+                    if (!nama || String(nama).trim() === "") return;
 
                     const card = document.createElement('div');
                     card.className = 'yupa-card';
+
+                    // TRIK UTAMA: Merakit URL Foto Profil dari ID Username Google Scholar
+                    let imageSrc = defaultAvatar;
+                    if (usernameGS && usernameGS.toString().trim() !== "") {
+                        imageSrc = `https://scholar.googleusercontent.com/citations?user=${usernameGS.trim()}&user_image_id=`;
+                    }
 
                     let buttonsHtml = '';
                     if (linkGS && linkGS.toString().trim() !== "") {
@@ -157,7 +177,7 @@
                     }
 
                     card.innerHTML = `
-                        <img src="${imageSrc}" alt="${nama}" class="yupa-img">
+                        <img src="${imageSrc}" alt="${nama}" class="yupa-img" onerror="this.src='${defaultAvatar}'">
                         <div class="yupa-name">${nama}</div>
                         <div class="yupa-inst">${institusi}</div>
                         <div class="yupa-links">${buttonsHtml}</div>
@@ -167,7 +187,7 @@
             })
             .catch(error => {
                 console.error('Error:', error);
-                gridContainer.innerHTML = '<div class="yupa-status" style="color: #ef4444;">Gagal memuat data. Periksa kembali deployment Apps Script Anda.</div>';
+                gridContainer.innerHTML = '<div class="yupa-status" style="color: #ef4444;">Gagal memuat data dari Spreadsheet.</div>';
             });
     });
 </script>
