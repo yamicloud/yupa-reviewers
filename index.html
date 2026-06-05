@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reviewers Jurnal Yupa - Terintegrasi Sistem Baru</title>
+    <title>Reviewers Jurnal Yupa - Anti Cache Loading</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
@@ -109,7 +109,7 @@
     <div class="yupa-grid" id="team-grid">
         <div class="yupa-loading-container" id="loading-spinner">
             <i class="fa-solid fa-circle-notch fa-spin yupa-spinner"></i>
-            <div>Menghubungkan ke server basis data baru...</div>
+            <div>Memuat pembaruan data reviewer...</div>
         </div>
     </div>
 
@@ -117,5 +117,121 @@
     document.addEventListener("DOMContentLoaded", function() {
         const gridContainer = document.getElementById('team-grid');
         
-        // TELAH DIPERBARUI: Menggunakan ID Web App Rilisan Teranyar Anda
-        const apiUrl = '
+        const baseApiUrl = 'https://script.google.com/macros/s/AKfycbyhFxkrB4QKeqSNmPYGH1qlU2y6F_PdJuAxitHeb7GOSj3DlIA2UUk3VLZdSlhtq8jfmg/exec';
+        
+        // FITUR BARU: Menambahkan parameter timestamp unik untuk menghancurkan cache browser saat update data
+        const apiUrl = baseApiUrl + '?_cb=' + new Date().getTime();
+        
+        const defaultAvatar = 'https://www.w3schools.com/howto/img_avatar.png';
+        const logoUrls = { scholar: 'google scholar.png', scopus: 'scopus.png', sinta: 'sinta.jpg', orcid: 'orcid.jpg' };
+
+        const dataCadanganYupa = [
+            {"nama": "Sariyatun", "institusi": "Universitas Sebelas Maret", "googlescholar": "https://scholar.google.com"},
+            {"nama": "Leo Agung Sutimin", "institusi": "Universitas Sebelas Maret"},
+            {"nama": "Nunuk Suryani", "institusi": "Universitas Sebelas Maret"},
+            {"nama": "Nur Fatah Abidin", "institusi": "Universitas Sebelas Maret"},
+            {"nama": "Herry Porda Nugroho Putro", "institusi": "Universitas Lambung Mangkurat"},
+            {"nama": "Heri Susanto", "institusi": "Universitas Lambung Mangkurat"},
+            {"nama": "Mansyur", "institusi": "Universitas Lambung Mangkurat"},
+            {"nama": "Asyrul Fikri", "institusi": "Universitas Riau"},
+            {"nama": "Ahmad Muhajir", "institusi": "Universitas Andalas"},
+            {"nama": "Aksa", "institusi": "UIN Alauddin Makassar"},
+            {"nama": "Muhammad Rezky Noor Handy", "institusi": "Universitas Lambung Mangkurat"},
+            {"nama": "Piki Setri Pernantah", "institusi": "Universitas Riau"},
+            {"nama": "Fauzan Syahru Ramadhan", "institusi": "Universitas Diponegoro"},
+            {"nama": "Bunari", "institusi": "Universitas Riau"},
+            {"nama": "Yanuar Al Fiqri", "institusi": "Universitas Riau"},
+            {"nama": "Firza", "institusi": "Universitas Negeri Padang", "googlescholar": "https://scholar.google.com", "sinta": "https://sinta.kemdikbud.go.id"},
+            {"nama": "Rulianto", "institusi": "Universitas Mahasaraswati Denpasar"},
+            {"nama": "Dewicca Fatma Nadilla", "institusi": "Universitas Lambung Mangkurat"},
+            {"nama": "Mohammad Zaenal Arifin Anis", "institusi": "Universitas Lambung Mangkurat"},
+            {"nama": "Rochgiyanti", "institusi": "Universitas Lambung Mangkurat"},
+            {"nama": "Syaharuddin", "institusi": "Universitas Lambung Mangkurat"},
+            {"nama": "Roger Kembuan", "institusi": "Universitas Sam Ratulangi"},
+            {"nama": "Aisiah", "institusi": "Universitas Negeri Padang"},
+            {"nama": "Khoirul Anwar", "institusi": "Universitas Negeri Semarang"}
+        ];
+
+        function renderDataGrid(data) {
+            gridContainer.innerHTML = ''; 
+            if (!data || data.length === 0) {
+                gridContainer.innerHTML = '<div class="yupa-status">Belum ada data reviewer terisi.</div>';
+                return;
+            }
+            data.forEach(item => {
+                const cleanItem = {};
+                for (let key in item) {
+                    cleanItem[key.toLowerCase().replace(/[^a-z0-9]/g, '')] = item[key];
+                }
+                
+                let nama = cleanItem['nama'] || '';
+                const institusi = cleanItem['institusi'] || '';
+                
+                const linkGS = cleanItem['googlescholar'] || cleanItem['linkgs'] || '';
+                const linkSinta = cleanItem['sintaid'] || cleanItem['linksinta'] || '';
+                const linkScopus = cleanItem['scopusid'] || cleanItem['linkscopus'] || '';
+                const linkOrcid = cleanItem['orcid'] || cleanItem['linkorcid'] || cleanItem['orcidid'] || '';
+                const foto = cleanItem['foto'] || cleanItem['fotogs'] || '';
+
+                if (!nama || String(nama).trim() === "") return;
+
+                const card = document.createElement('div');
+                card.className = 'yupa-card';
+                const imageSrc = (foto && String(foto).trim() !== "") ? String(foto).trim() : defaultAvatar;
+
+                let buttonsHtml = '';
+                if (linkGS && linkGS.toString().trim() !== "") {
+                    buttonsHtml += `<a href="${linkGS}" target="_blank" class="yupa-btn" title="Google Scholar"><img src="${encodeURIComponent(logoUrls.scholar)}" class="logo-provider" alt="Google Scholar"></a>`;
+                }
+                if (linkScopus && linkScopus.toString().trim() !== "") {
+                    buttonsHtml += `<a href="${linkScopus}" target="_blank" class="yupa-btn" title="Scopus"><img src="${logoUrls.scopus}" class="logo-provider" alt="Scopus"></a>`;
+                }
+                if (linkSinta && linkSinta.toString().trim() !== "") {
+                    buttonsHtml += `<a href="${linkSinta}" target="_blank" class="yupa-btn" title="SINTA ID"><img src="${logoUrls.sinta}" class="logo-provider" alt="SINTA"></a>`;
+                }
+                if (linkOrcid && linkOrcid.toString().trim() !== "") {
+                    buttonsHtml += `<a href="${linkOrcid}" target="_blank" class="yupa-btn" title="ORCID iD"><img src="${logoUrls.orcid}" class="logo-provider" alt="ORCID"></a>`;
+                }
+
+                card.innerHTML = `
+                    <div class="yupa-left-column"><img src="${imageSrc}" alt="${nama}" class="yupa-img" onerror="this.src='${defaultAvatar}'"></div>
+                    <div class="yupa-info-wrapper">
+                        <div class="yupa-name">${nama}</div>
+                        <div class="yupa-inst"><i class="fa-solid fa-university"></i> ${institusi}</div>
+                        <div class="yupa-links">${buttonsHtml}</div>
+                    </div>
+                `;
+                gridContainer.appendChild(card);
+            });
+        }
+
+        let dataSudahDiterima = false;
+        
+        // Waktu tunggu disetel seimbang pada 2,5 detik agar data cloud sempat masuk secara bersih
+        const batasWaktuTunggu = setTimeout(() => {
+            if (!dataSudahDiterima) {
+                dataSudahDiterima = true;
+                renderDataGrid(dataCadanganYupa);
+            }
+        }, 2500); 
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                if (!dataSudahDiterima) {
+                    clearTimeout(batasWaktuTunggu);
+                    dataSudahDiterima = true;
+                    renderDataGrid(data);
+                }
+            })
+            .catch(error => {
+                if (!dataSudahDiterima) {
+                    clearTimeout(batasWaktuTunggu);
+                    dataSudahDiterima = true;
+                    renderDataGrid(dataCadanganYupa);
+                }
+            });
+    });
+</script>
+</body>
+</html>
