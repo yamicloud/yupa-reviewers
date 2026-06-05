@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reviewers 2-Column Grid - Big Text Layout</title>
+    <title>Reviewers 2-Column Grid - Fixed Layout</title>
+    <!-- Memanggil pustaka FontAwesome untuk ikon kampus dan spinner -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
@@ -18,7 +19,7 @@
         .yupa-grid {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 16px; /* Jarak antar kartu sedikit diperlonggar agar lebih mewah */
+            gap: 16px; 
             width: 100%;
             box-sizing: border-box;
         }
@@ -27,12 +28,12 @@
         .yupa-card {
             background: #ffffff;
             border: 1px solid #e2e8f0;
-            border-radius: 12px; /* Sudut kartu dibuat lebih lembut */
+            border-radius: 12px; 
             padding: 16px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.01), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
             display: flex;
             flex-direction: row;
-            align-items: flex-start; /* Sejajar dari atas karena kolom kiri akan memanjang ke bawah */
+            align-items: flex-start; 
             justify-content: flex-start;
             box-sizing: border-box;
             transition: all 0.2s ease;
@@ -44,17 +45,16 @@
             transform: translateY(-1px);
         }
 
-        /* PERBAIKAN: Kolom Kiri Kustom (Khusus Foto + Barisan Logo Vertikal) */
+        /* Kolom Kiri (Khusus Foto + Barisan Logo Vertikal) */
         .yupa-left-column {
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-right: 18px; /* Jarak kolom kiri ke kolom teks kanan */
+            margin-right: 18px; 
             flex-shrink: 0;
-            width: 65px; /* Lebar dikunci agar simetris vertikal */
+            width: 65px; 
         }
 
-        /* Ukuran foto profil disesuaikan agar seimbang */
         .yupa-img {
             width: 60px;
             height: 60px;
@@ -62,26 +62,24 @@
             object-fit: cover;
             border: 2px solid #f1f5f9;
             background-color: #f8fafc;
-            margin-bottom: 10px; /* Jarak foto ke logo pertama di bawahnya */
+            margin-bottom: 10px; 
         }
 
-        /* Susunan logo kustom vertikal ke bawah di bawah foto */
         .yupa-links {
             display: flex;
             flex-direction: column;
-            gap: 5px; /* Jarak antar badge vertikal */
+            gap: 5px; 
             width: 100%;
             align-items: center;
         }
 
-        /* Tombol penampung badge persegi panjang horizontal */
         .yupa-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             text-decoration: none;
             transition: all 0.2s ease;
-            height: 18px; /* Diperkecil sedikit agar pas secara vertikal di bawah foto */
+            height: 18px; 
             width: auto;  
         }
 
@@ -97,46 +95,42 @@
             display: block;
         }
 
-
-        /* PERBAIKAN: Kolom Kanan Kustom (Fokus Teks Ukuran JUMBO) */
+        /* Kolom Kanan (Teks Ukuran JUMBO) */
         .yupa-info-wrapper {
             display: flex;
             flex-direction: column;
             flex-grow: 1;
             min-width: 0;
-            padding-top: 2px; /* Penyelarasan vertikal dengan puncak foto */
+            padding-top: 2px; 
         }
 
-        /* Ukuran font NAMA dinaikkan menjadi besar dan tegas */
         .yupa-name {
-            font-size: 1.05rem; /* Sebelumnya 0.88rem (Naik signifikan) */
-            font-weight: 700;   /* Lebih tebal dan elegan */
+            font-size: 1.05rem; 
+            font-weight: 700;   
             color: #0f172a;
             margin: 0 0 6px 0;
             line-height: 1.3;
-            white-space: normal; /* Mengizinkan teks turun ke bawah jika nama sangat panjang */
+            white-space: normal; 
             word-wrap: break-word;
         }
 
-        /* Ukuran font INSTITUSI dinaikkan agar terbaca jelas */
         .yupa-inst {
-            font-size: 0.85rem; /* Sebelumnya 0.74rem (Naik signifikan) */
+            font-size: 0.85rem; 
             color: #475569;
             margin: 0;
             line-height: 1.4;
             display: flex;
-            align-items: flex-start; /* Ikon kampus tetap di atas jika teks memanjang dua baris */
+            align-items: flex-start; 
             gap: 6px;
             white-space: normal;
             word-wrap: break-word;
         }
 
         .yupa-inst i {
-            color: #0284c7; /* Warna ikon kampus dibuat biru segar */
+            color: #0284c7; 
             font-size: 0.85rem;
-            margin-top: 3px; /* Penyelarasan center-top dengan teks */
+            margin-top: 3px; 
         }
-
 
         /* Desain Kontainer Loading Spinner Animasi */
         .yupa-loading-container {
@@ -182,7 +176,6 @@
         const apiUrl = 'https://script.google.com/macros/s/AKfycbwREzVUx42kFPi1pWgwUCdn0xi_ZF2GazKK5ZM2N9ZLV4f56rPy5KhKC4-yZ7lTwDvEww/exec';
         const defaultAvatar = 'https://www.w3schools.com/howto/img_avatar.png';
 
-        // Memanggil file gambar horizontal resmi dari repositori GitHub Anda
         const logoUrls = {
             scholar: 'google scholar.png', 
             scopus: 'scopus.png',
@@ -190,80 +183,119 @@
             orcid: 'orcid.jpg'
         };
 
+        // DATA CADANGAN (LOKAL): Tampil instan jika server Google mendadak lemot
+        const dataCadanganYupa = [
+            {"nama": "Sariyatun", "institusi": "Universitas Sebelas Maret", "googlescholar": "https://scholar.google.com"},
+            {"nama": "Leo Agung Sutimin", "institusi": "Universitas Sebelas Maret"},
+            {"nama": "Nunuk Suryani", "institusi": "Universitas Sebelas Maret"},
+            {"nama": "Nur Fatah Abidin", "institusi": "Universitas Sebelas Maret"},
+            {"nama": "Herry Porda Nugroho Putro", "institusi": "Universitas Lambung Mangkurat"},
+            {"nama": "Heri Susanto", "institusi": "Universitas Lambung Mangkurat"},
+            {"nama": "Mansyur", "institusi": "Universitas Lambung Mangkurat"},
+            {"nama": "Asyrul Fikri", "institusi": "Universitas Riau"},
+            {"nama": "Ahmad Muhajir", "institusi": "Universitas Andalas"},
+            {"nama": "Aksa", "institusi": "UIN Alauddin Makassar"},
+            {"nama": "Muhammad Rezky Noor Handy", "institusi": "Universitas Lambung Mangkurat"},
+            {"nama": "Piki Setri Pernantah", "institusi": "Universitas Riau"},
+            {"nama": "Fauzan Syahru Ramadhan", "institusi": "Universitas Diponegoro"},
+            {"nama": "Bunari", "institusi": "Universitas Riau"},
+            {"nama": "Yanuar Al Fiqri", "institusi": "Universitas Riau"},
+            {"nama": "Firza", "institusi": "Universitas Negeri Padang", "googlescholar": "https://scholar.google.com", "sinta": "https://sinta.kemdikbud.go.id"},
+            {"nama": "Rulianto", "institusi": "Universitas Mahasaraswati Denpasar"},
+            {"nama": "Dewicca Fatma Nadilla", "institusi": "Universitas Lambung Mangkurat"},
+            {"nama": "Mohammad Zaenal Arifin Anis", "institusi": "Universitas Lambung Mangkurat"},
+            {"nama": "Rochgiyanti", "institusi": "Universitas Lambung Mangkurat"},
+            {"nama": "Syaharuddin", "institusi": "Universitas Lambung Mangkurat"},
+            {"nama": "Roger Kembuan", "institusi": "Universitas Sam Ratulangi"},
+            {"nama": "Aisiah", "institusi": "Universitas Negeri Padang"},
+            {"nama": "Khoirul Anwar", "institusi": "Universitas Negeri Semarang"}
+        ];
+
+        function renderDataGrid(data) {
+            gridContainer.innerHTML = ''; 
+            if (!data || data.length === 0) {
+                gridContainer.innerHTML = '<div class="yupa-status">Belum ada data reviewer terisi.</div>';
+                return;
+            }
+
+            data.forEach(item => {
+                // NORMALISASI KUSTOM: Menghapus spasi dan mengubah huruf kecil agar toleran terhadap "Google Scholar" atau "SINTA ID"
+                const cleanItem = {};
+                for (let key in item) {
+                    const normalizedKey = key.toLowerCase().replace(/[^a-z0-9]/g, '');
+                    cleanItem[normalizedKey] = item[key];
+                }
+
+                let nama = cleanItem['nama'] || '';
+                const institusi = cleanItem['institusi'] || '';
+                
+                // Pencocokan fleksibel untuk nama kolom yang memiliki spasi di Spreadsheet Anda
+                const linkGS = cleanItem['googlescholar'] || cleanItem['linkgs'] || '';
+                const linkSinta = cleanItem['sintaid'] || cleanItem['linksinta'] || '';
+                const linkScopus = cleanItem['scopusid'] || cleanItem['linkscopus'] || '';
+                const linkOrcid = cleanItem['orcid'] || cleanItem['linkorcid'] || cleanItem['orcidid'] || '';
+                const foto = cleanItem['foto'] || cleanItem['fotogs'] || '';
+
+                if (!nama || String(nama).trim() === "") return;
+
+                const card = document.createElement('div');
+                card.className = 'yupa-card';
+
+                const imageSrc = (foto && String(foto).trim() !== "") ? String(foto).trim() : defaultAvatar;
+
+                let buttonsHtml = '';
+                if (linkGS && linkGS.toString().trim() !== "") {
+                    buttonsHtml += `<a href="${linkGS}" target="_blank" class="yupa-btn" title="Google Scholar"><img src="${encodeURIComponent(logoUrls.scholar)}" class="logo-provider" alt="Google Scholar"></a>`;
+                }
+                if (linkScopus && linkScopus.toString().trim() !== "") {
+                    buttonsHtml += `<a href="${linkScopus}" target="_blank" class="yupa-btn" title="Scopus"><img src="${logoUrls.scopus}" class="logo-provider" alt="Scopus"></a>`;
+                }
+                if (linkSinta && linkSinta.toString().trim() !== "") {
+                    buttonsHtml += `<a href="${linkSinta}" target="_blank" class="yupa-btn" title="SINTA ID"><img src="${logoUrls.sinta}" class="logo-provider" alt="SINTA"></a>`;
+                }
+                if (linkOrcid && linkOrcid.toString().trim() !== "") {
+                    buttonsHtml += `<a href="${linkOrcid}" target="_blank" class="yupa-btn" title="ORCID iD"><img src="${logoUrls.orcid}" class="logo-provider" alt="ORCID"></a>`;
+                }
+
+                card.innerHTML = `
+                    <div class="yupa-left-column">
+                        <img src="${imageSrc}" alt="${nama}" class="yupa-img" onerror="this.src='${defaultAvatar}'">
+                        <div class="yupa-links">${buttonsHtml}</div>
+                    </div>
+                    <div class="yupa-info-wrapper">
+                        <div class="yupa-name">${nama}</div>
+                        <div class="yupa-inst"><i class="fa-solid fa-university"></i> ${institusi}</div>
+                    </div>
+                `;
+                gridContainer.appendChild(card);
+            });
+        }
+
+        // SISTEM ANTISIPASI: Maksimal tunggu Google Script 3,5 detik. Jika macet, langsung lempar data lokal
+        let dataSudahDiterima = false;
+        const batasWaktuTunggu = setTimeout(() => {
+            if (!dataSudahDiterima) {
+                dataSudahDiterima = true;
+                renderDataGrid(dataCadanganYupa);
+            }
+        }, 3500); 
+
         fetch(apiUrl)
             .then(response => response.json())
             .then(data => {
-                gridContainer.innerHTML = ''; 
-
-                if (!data || data.length === 0) {
-                    gridContainer.innerHTML = '<div class="yupa-status">Belum ada data reviewer terisi di spreadsheet.</div>';
-                    return;
+                if (!dataSudahDiterima) {
+                    clearTimeout(batasWaktuTunggu);
+                    dataSudahDiterima = true;
+                    renderDataGrid(data);
                 }
-
-                data.forEach(item => {
-                    const cleanItem = {};
-                    for (let key in item) {
-                        cleanItem[key.toLowerCase().replace(/[^a-z0-9]/g, '')] = item[key];
-                    }
-
-                    let nama = cleanItem['nama'] || '';
-                    if (!nama) {
-                        const keys = Object.keys(cleanItem);
-                        for (let k of keys) {
-                            let val = String(cleanItem[k]).trim();
-                            if (val && isNaN(val) && !val.includes("http") && !k.includes("institut") && !k.includes("usernam")) {
-                                nama = val;
-                                break;
-                            }
-                        }
-                    }
-
-                    const institusi = cleanItem['institusi'] || '';
-                    const linkGS = cleanItem['googlescholar'] || cleanItem['linkgs'] || '';
-                    const linkSinta = cleanItem['sintaid'] || cleanItem['linksinta'] || '';
-                    const linkScopus = cleanItem['scopusid'] || cleanItem['linkscopus'] || '';
-                    const linkOrcid = cleanItem['orcid'] || cleanItem['linkorcid'] || cleanItem['orcidid'] || '';
-                    const foto = cleanItem['foto'] || cleanItem['fotogs'] || '';
-
-                    if (!nama || String(nama).trim() === "") return;
-
-                    const card = document.createElement('div');
-                    card.className = 'yupa-card';
-
-                    const imageSrc = (foto && String(foto).trim() !== "") ? String(foto).trim() : defaultAvatar;
-
-                    // Merakit HTML untuk barisan badge vertikal kustom
-                    let buttonsHtml = '';
-                    if (linkGS && linkGS.toString().trim() !== "") {
-                        buttonsHtml += `<a href="${linkGS}" target="_blank" class="yupa-btn" title="Google Scholar"><img src="${encodeURIComponent(logoUrls.scholar)}" class="logo-provider" alt="Google Scholar"></a>`;
-                    }
-                    if (linkScopus && linkScopus.toString().trim() !== "") {
-                        buttonsHtml += `<a href="${linkScopus}" target="_blank" class="yupa-btn" title="Scopus"><img src="${logoUrls.scopus}" class="logo-provider" alt="Scopus"></a>`;
-                    }
-                    if (linkSinta && linkSinta.toString().trim() !== "") {
-                        buttonsHtml += `<a href="${linkSinta}" target="_blank" class="yupa-btn" title="SINTA ID"><img src="${logoUrls.sinta}" class="logo-provider" alt="SINTA"></a>`;
-                    }
-                    if (linkOrcid && linkOrcid.toString().trim() !== "") {
-                        buttonsHtml += `<a href="${linkOrcid}" target="_blank" class="yupa-btn" title="ORCID iD"><img src="${logoUrls.orcid}" class="logo-provider" alt="ORCID"></a>`;
-                    }
-
-                    // LAYOUT BARU: Struktur dibagi tegas menjadi yupa-left-column (kiri) dan yupa-info-wrapper (kanan)
-                    card.innerHTML = `
-                        <div class="yupa-left-column">
-                            <img src="${imageSrc}" alt="${nama}" class="yupa-img" onerror="this.src='${defaultAvatar}'">
-                            <div class="yupa-links">${buttonsHtml}</div>
-                        </div>
-                        <div class="yupa-info-wrapper">
-                            <div class="yupa-name">${nama}</div>
-                            <div class="yupa-inst"><i class="fa-solid fa-university"></i> ${institusi}</div>
-                        </div>
-                    `;
-                    gridContainer.appendChild(card);
-                });
             })
             .catch(error => {
-                console.error('Error:', error);
-                gridContainer.innerHTML = '<div class="yupa-status" style="color: #ef4444;">Gagal memuat data dari Spreadsheet.</div>';
+                console.error('Fetch Error, beralih ke data lokal:', error);
+                if (!dataSudahDiterima) {
+                    clearTimeout(batasWaktuTunggu);
+                    dataSudahDiterima = true;
+                    renderDataGrid(dataCadanganYupa);
+                }
             });
     });
 </script>
