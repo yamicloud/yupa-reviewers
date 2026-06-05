@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reviewers 2-Column Compact Grid with Icons</title>
-    <!-- Memanggil pustaka FontAwesome untuk memunculkan ikon kustom -->
+    <title>Reviewers 2-Column Compact Grid with Official Logos</title>
+    <!-- Memanggil pustaka FontAwesome untuk ikon kampus -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background-color: transparent; 
             margin: 0;
-            padding: 5px;
+            padding: 5px 5px 30px 5px; /* Jarak pengaman bawah */
             overflow: hidden; 
         }
 
@@ -44,7 +44,7 @@
             background-color: #f8fafc;
         }
 
-        /* Ukuran foto profil diperkecil agar hemat ruang */
+        /* Ukuran foto profil */
         .yupa-img {
             width: 55px;
             height: 55px;
@@ -75,7 +75,7 @@
             text-overflow: ellipsis;
         }
 
-        /* Ikon kampus dan teks institusi */
+        /* Teks institusi */
         .yupa-inst {
             font-size: 0.74rem;
             color: #64748b;
@@ -94,36 +94,47 @@
             font-size: 0.75rem;
         }
 
-        /* Pembungkus tombol ikon di sisi kanan kartu */
+        /* Pembungkus tombol logo di sisi kanan kartu */
         .yupa-links {
             display: flex;
-            gap: 4px;
+            gap: 6px;
             margin-left: 10px;
             flex-shrink: 0;
         }
 
-        /* Gaya tombol lingkaran kompak khusus ikon */
+        /* Tombol lingkaran penampung logo asli */
         .yupa-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 28px;
-            height: 28px;
+            width: 30px;
+            height: 30px;
             text-decoration: none;
             border-radius: 50%;
-            font-size: 0.82rem;
             transition: all 0.2s ease;
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
-        /* Definisi warna ikon identitas indeksasi */
-        .yp-gs { background-color: #ebf8ff; color: #2b6cb0; border: 1px solid #bee3f8; }
-        .yp-gs:hover { background-color: #3182ce; color: #ffffff; }
+        .yupa-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+            border-color: #cbd5e1;
+        }
 
-        .yp-scopus { background-color: #fffaf0; color: #dd6b20; border: 1px solid #feebc8; }
-        .yp-scopus:hover { background-color: #dd6b20; color: #ffffff; }
+        /* Pengaturan ukuran logo asli di dalam lingkaran */
+        .logo-provider {
+            width: 18px;
+            height: 18px;
+            object-fit: contain;
+        }
 
-        .yp-sinta { background-color: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
-        .yp-sinta:hover { background-color: #334155; color: #ffffff; }
+        /* Khusus scopus disesuaikan sedikit agar proporsional */
+        .logo-scopus {
+            width: 15px;
+            height: 15px;
+        }
 
         .yupa-status {
             text-align: center;
@@ -133,7 +144,7 @@
             grid-column: 1 / -1;
         }
 
-        /* Responsif: Otomatis kembali menjadi 1 kolom jika dibuka lewat layar HP */
+        /* Responsif mobile */
         @media (max-width: 768px) {
             .yupa-grid { grid-template-columns: repeat(1, minmax(0, 1fr)); }
         }
@@ -151,19 +162,13 @@
         const apiUrl = 'https://script.google.com/macros/s/AKfycbwREzVUx42kFPi1pWgwUCdn0xi_ZF2GazKK5ZM2N9ZLV4f56rPy5KhKC4-yZ7lTwDvEww/exec';
         const defaultAvatar = 'https://www.w3schools.com/howto/img_avatar.png';
 
-        // PERBAIKAN UTAMA: Mengirim data tinggi asli tanpa memedulikan batasan domain (menggunakan '*' aman)
-        function kirimTinggiKeOJS() {
-            const tinggiKonten = document.documentElement.getBoundingClientRect().height || document.body.scrollHeight;
-            if (tinggiKonten > 100) {
-                window.parent.postMessage({ 'tinggiIframeYupa': tinggiKonten }, '*');
-            }
-        }
-
-        // Memantau perubahan ukuran element secara real-time (saat data masuk atau gambar selesai di-load)
-        const observer = new ResizeObserver(() => {
-            kirimTinggiKeOJS();
-        });
-        observer.observe(document.body);
+        // URL Aset Gambar Logo Resmi Provider (Menggunakan CDN resmi & terpercaya)
+        const logoUrls = {
+            scholar: 'https://upload.wikimedia.org/wikipedia/commons/c/c7/Google_Scholar_logo.svg',
+            scopus: 'https://upload.wikimedia.org/wikipedia/commons/2/26/Scopus_logo_2021.svg',
+            sinta: 'https://raw.githubusercontent.com/yamicloud/yupa-reviewers/main/logo-sinta.png' 
+            // Jika link raw SINTA di atas tidak sengaja terhapus, alternatif cadangan otomatis di bawah akan mem-backup.
+        };
 
         fetch(apiUrl)
             .then(response => response.json())
@@ -206,15 +211,18 @@
 
                     const imageSrc = (foto && String(foto).trim() !== "") ? String(foto).trim() : defaultAvatar;
 
+                    // Menyusun tombol menggunakan elemen IMG logo asli provider
                     let buttonsHtml = '';
                     if (linkGS && linkGS.toString().trim() !== "") {
-                        buttonsHtml += `<a href="${linkGS}" target="_blank" class="yupa-btn yp-gs" title="Google Scholar"><i class="fa-solid fa-graduation-cap"></i></a>`;
+                        buttonsHtml += `<a href="${linkGS}" target="_blank" class="yupa-btn" title="Google Scholar"><img src="${logoUrls.scholar}" class="logo-provider" alt="GS"></a>`;
                     }
                     if (linkScopus && linkScopus.toString().trim() !== "") {
-                        buttonsHtml += `<a href="${linkScopus}" target="_blank" class="yupa-btn yp-scopus" title="Scopus"><i class="fa-solid fa-database"></i></a>`;
+                        buttonsHtml += `<a href="${linkScopus}" target="_blank" class="yupa-btn" title="Scopus"><img src="${logoUrls.scopus}" class="logo-provider logo-scopus" alt="Scopus"></a>`;
                     }
                     if (linkSinta && linkSinta.toString().trim() !== "") {
-                        buttonsHtml += `<a href="${linkSinta}" target="_blank" class="yupa-btn yp-sinta" title="SINTA ID"><i class="fa-solid fa-award"></i></a>`;
+                        // Menggunakan fallback jika logo sinta utama memerlukan backup visual kemenristek/brin
+                        const sintaImgSrc = 'https://sinta.kemdikbud.go.id/assets/img/logo.png';
+                        buttonsHtml += `<a href="${linkSinta}" target="_blank" class="yupa-btn" title="SINTA ID"><img src="${sintaImgSrc}" class="logo-provider" alt="Sinta" onerror="this.src='https://assets.kompasiana.com/items/album/2021/08/25/sinta-61262d0406310e06000c00b2.png'"></a>`;
                     }
 
                     card.innerHTML = `
@@ -227,9 +235,6 @@
                     `;
                     gridContainer.appendChild(card);
                 });
-                
-                // Pemicu awal kalkulasi tinggi
-                setTimeout(kirimTinggiKeOJS, 500);
             })
             .catch(error => {
                 console.error('Error:', error);
