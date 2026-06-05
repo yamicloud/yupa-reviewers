@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reviewers Jurnal Yupa - International Standardization Layout</title>
+    <title>Reviewers Jurnal Yupa - Multi-Expertise Standard Layout</title>
+    <!-- Memanggil FontAwesome untuk ikon kampus, spinner, dan tag keahlian -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
@@ -70,7 +71,7 @@
             font-size: 0.88rem; 
             font-weight: 600;   
             color: #475569;     
-            margin: 0 0 6px 0; 
+            margin: 0 0 8px 0; 
             line-height: 1.4;
             display: flex;
             align-items: center; 
@@ -80,28 +81,33 @@
         }
         .yupa-inst i { color: #0284c7; font-size: 0.9rem; }
         
-        /* DESAIN BADGE KEAHLIAN BARU DENGAN INDIKATOR IKON */
-        .yupa-expertise {
-            font-size: 0.78rem;
-            font-weight: 500;
-            color: #0369a1; /* Warna teks biru tua elegan */
-            background-color: #f0f9ff; /* Background biru muda soft */
-            padding: 4px 10px;
+        /* WADAH UNTUK AKOMODASI BANYAK TAG KEAHLIAN SEKALIGUS */
+        .yupa-expertise-container {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap; /* Izinkan tag turun ke bawah jika lebih dari 2 keahlian */
+            gap: 6px; /* Jarak rapat antar badge keahlian */
+            margin: 0 0 12px 0;
+            width: 100%;
+        }
+
+        /* GAYA BADGE MINI UNTUK SETIAP KEAHLIAN INDIVIDUAL */
+        .yupa-tag {
+            font-size: 0.74rem;
+            font-weight: 600;
+            color: #0369a1; /* Biru tua premium */
+            background-color: #f0f9ff; /* Biru muda soft */
+            padding: 3px 8px;
             border-radius: 6px;
-            margin: 0 0 10px 0;
             display: inline-flex;
             align-items: center;
-            gap: 6px; /* Jarak ikon ke teks keahlian */
-            align-self: flex-start;
-            max-width: 100%;
-            white-space: normal;
-            word-wrap: break-word;
+            gap: 4px;
             border: 1px solid #e0f2fe;
+            white-space: nowrap; /* Mencegah satu kata keahlian terpotong ditengah */
         }
-        .yupa-expertise i {
-            color: #38bdf8; /* Warna ikon langit segar */
-            font-size: 0.8rem;
-            flex-shrink: 0;
+        .yupa-tag i {
+            color: #38bdf8;
+            font-size: 0.75rem;
         }
 
         .yupa-links {
@@ -155,8 +161,8 @@
                 let nama = cleanItem['nama'] || '';
                 const institusi = cleanItem['institusi'] || '';
                 
-                // Otomatis membaca kolom bernama "Keahlian" atau "Bidang Keahlian" di Spreadsheet Anda
-                const keahlian = cleanItem['keahlian'] || cleanItem['bidangkeahlian'] || cleanItem['expert'] || '';
+                // Mendeteksi data keahlian dari Spreadsheet
+                const keahlianRaw = cleanItem['keahlian'] || cleanItem['bidangkeahlian'] || cleanItem['expert'] || '';
                 
                 const linkGS = cleanItem['googlescholar'] || cleanItem['linkgs'] || '';
                 const linkSinta = cleanItem['sintaid'] || cleanItem['linksinta'] || '';
@@ -170,10 +176,22 @@
                 card.className = 'yupa-card';
                 const imageSrc = (foto && String(foto).trim() !== "") ? String(foto).trim() : defaultAvatar;
 
-                // Suntik Ikon Tag Dinamis ke dalam Badge Keahlian
+                // PROSES STRATEGI BARU: Memecah teks koma menjadi beberapa badge keahlian terpisah
                 let expertiseHtml = '';
-                if (keahlian && keahlian.toString().trim() !== "") {
-                    expertiseHtml = `<div class="yupa-expertise"><i class="fa-solid fa-tags"></i> ${keahlian}</div>`;
+                if (keahlianRaw && keahlianRaw.toString().trim() !== "") {
+                    expertiseHtml = '<div class="yupa-expertise-container">';
+                    
+                    // Memotong string berdasarkan karakter tanda koma ","
+                    const daftarKeahlian = keahlianRaw.toString().split(',');
+                    
+                    daftarKeahlian.forEach(keahlianTunggal => {
+                        const teksBersih = keahlianTunggal.trim();
+                        if (teksBersih !== "") {
+                            expertiseHtml += `<span class="yupa-tag"><i class="fa-solid fa-tag"></i>${teksBersih}</span>`;
+                        }
+                    });
+                    
+                    expertiseHtml += '</div>';
                 }
 
                 let buttonsHtml = '';
@@ -211,7 +229,7 @@
             gridContainer.innerHTML = '<div class="yupa-status"><i class="fa-solid fa-circle-notch fa-spin"></i> Sinkronisasi sistem indeksasi internasional...</div>';
         }
 
-        // Ambil data dari spreadsheet di latar belakang
+        // Ambil data segar dari cloud di latar belakang
         fetch(apiUrl)
             .then(response => response.json())
             .then(dataCloud => {
