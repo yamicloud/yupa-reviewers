@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reviewers Dynamic Cards</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: transparent; 
+            margin: 0;
+            padding: 10px;
+        }
+
+        .yupa-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .yupa-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 24px 16px;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-sizing: border-box;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .yupa-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.05);
+            border-color: #cbd5e1;
+        }
+
+        .yupa-img {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 14px;
+            border: 2px solid #f1f5f9;
+        }
+
+        .yupa-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 16px;
+            line-height: 1.4;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .yupa-links {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: auto;
+        }
+
+        .yupa-btn {
+            font-size: 0.72rem;
+            text-decoration: none;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .yp-gs { background-color: #ebf8ff; color: #2b6cb0; border: 1px solid #bee3f8; }
+        .yp-gs:hover { background-color: #3182ce; color: #ffffff; }
+
+        .yp-scopus { background-color: #fffaf0; color: #dd6b20; border: 1px solid #feebc8; }
+        .yp-scopus:hover { background-color: #dd6b20; color: #ffffff; }
+
+        .yp-sinta { background-color: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
+        .yp-sinta:hover { background-color: #334155; color: #ffffff; }
+
+        .yupa-status {
+            text-align: center;
+            color: #64748b;
+            font-style: italic;
+            padding: 30px 0;
+            grid-column: 1 / -1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="yupa-grid" id="team-grid">
+        <div class="yupa-status">Memuat daftar reviewer secara realtime...</div>
+    </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const gridContainer = document.getElementById('team-grid');
+        // Langsung menggunakan URL API dari ID rilis Spreadsheet Yupa Anda
+        const apiUrl = 'https://script.google.com/macros/s/AKfycbwREzVUx42kFPi1pWgwUCdn0xi_ZF2GazKK5ZM2N9ZLV4f56rPy5KhKC4-yZ7lTwDvEww/exec';
+        const defaultAvatar = 'https://www.w3schools.com/howto/img_avatar.png';
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                gridContainer.innerHTML = ''; 
+
+                if (!data || data.length === 0) {
+                    gridContainer.innerHTML = '<div class="yupa-status">Belum ada data reviewer terisi di spreadsheet.</div>';
+                    return;
+                }
+
+                data.forEach(item => {
+                    const cleanItem = {};
+                    for (let key in item) {
+                        cleanItem[key.toLowerCase().trim()] = item[key];
+                    }
+
+                    const nama = cleanItem['nama'] || '';
+                    const foto = cleanItem['foto_gs'] || cleanItem['foto'] || '';
+                    const linkGS = cleanItem['link_gs'] || cleanItem['scholar'] || '';
+                    const linkScopus = cleanItem['link_scopus'] || cleanItem['scopus'] || '';
+                    const linkSinta = cleanItem['link_sinta'] || cleanItem['sinta'] || '';
+
+                    if (nama.trim() === "") return;
+
+                    const card = document.createElement('div');
+                    card.className = 'yupa-card';
+
+                    const imageSrc = (foto && foto.trim() !== "") ? foto : defaultAvatar;
+
+                    let buttonsHtml = '';
+                    if (linkGS && linkGS.trim() !== "") {
+                        buttonsHtml += `<a href="${linkGS}" target="_blank" class="yupa-btn yp-gs">Scholar</a>`;
+                    }
+                    if (linkScopus && linkScopus.trim() !== "") {
+                        buttonsHtml += `<a href="${linkScopus}" target="_blank" class="yupa-btn yp-scopus">Scopus</a>`;
+                    }
+                    if (linkSinta && linkSinta.trim() !== "") {
+                        buttonsHtml += `<a href="${linkSinta}" target="_blank" class="yupa-btn yp-sinta">Sinta</a>`;
+                    }
+
+                    card.innerHTML = `
+                        <img src="${imageSrc}" alt="${nama}" class="yupa-img" onerror="this.src='${defaultAvatar}'">
+                        <div class="yupa-name">${nama}</div>
+                        <div class="yupa-links">${buttonsHtml}</div>
+                    `;
+                    gridContainer.appendChild(card);
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                gridContainer.innerHTML = '<div class="yupa-status" style="color: #ef4444;">Gagal memuat data dari Spreadsheet.</div>';
+            });
+    });
+</script>
+</body>
+</html>
